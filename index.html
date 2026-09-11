@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>箱スキャン - 撮影</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>箱スキャン</h1>
+  </header>
+
+  <main>
+    <!-- パスワード入力 -->
+    <section id="auth-section">
+      <div class="info">
+        <p>共有パスワードを入力してください</p>
+      </div>
+      <input type="password" id="password-input" placeholder="パスワード" autocomplete="current-password">
+      <div id="auth-error" class="error-text" hidden></div>
+      <div class="actions">
+        <button id="btn-login" class="primary">ログイン</button>
+      </div>
+    </section>
+
+    <!-- スキャン -->
+    <section id="scanner-section" hidden>
+      <video id="video" playsinline muted></video>
+      <div class="scan-status">
+        <span id="scan-result">読取待ち…</span>
+      </div>
+      <div class="actions">
+        <button id="btn-rescan" class="secondary">再スキャン</button>
+        <button id="btn-drafts" class="secondary">下書き一覧</button>
+      </div>
+    </section>
+
+    <!-- 撮影 -->
+    <section id="capture-section" hidden>
+      <div class="info">
+        <div>バーコード: <strong id="confirmed-barcode"></strong></div>
+        <div id="face-guide" class="face-guide">1/4: 正面を撮影</div>
+      </div>
+      <video id="cam" playsinline muted></video>
+      <div class="actions">
+        <button id="btn-shutter" class="primary">📷 撮影</button>
+      </div>
+      <div id="thumbs" class="thumbs"></div>
+    </section>
+
+    <!-- 確認 -->
+    <section id="review-section" hidden>
+      <h2>確認</h2>
+      <div class="info">
+        <div>バーコード: <strong id="review-barcode"></strong></div>
+      </div>
+      <div id="review-thumbs" class="thumbs labeled"></div>
+      <textarea id="note-input" placeholder="備考（任意）" rows="2"></textarea>
+      <div class="actions">
+        <button id="btn-retake" class="secondary">撮り直し</button>
+        <button id="btn-upload" class="primary">アップロード</button>
+      </div>
+    </section>
+
+    <!-- 下書き一覧 -->
+    <section id="drafts-section" hidden>
+      <h2>下書き一覧</h2>
+      <div id="drafts-list"></div>
+      <div class="actions">
+        <button id="btn-drafts-close" class="secondary">閉じる</button>
+      </div>
+    </section>
+
+    <div id="toast" hidden></div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
