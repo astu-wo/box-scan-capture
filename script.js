@@ -51,7 +51,14 @@ function callGas(action, params) {
 
     const iframe = document.createElement('iframe');
     iframe.name = frameName;
-    iframe.style.display = 'none';
+    // display:none の iframe はモバイルブラウザによって読み込みや
+    // postMessage の実行が抑制されることがあるため、画面外に配置する。
+    iframe.style.position = 'fixed';
+    iframe.style.width = '1px';
+    iframe.style.height = '1px';
+    iframe.style.left = '-10000px';
+    iframe.style.top = '-10000px';
+    iframe.style.border = '0';
     document.body.appendChild(iframe);
 
     const form = document.createElement('form');
