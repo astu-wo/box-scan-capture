@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="color-scheme" content="light">
   <title>箱スキャン - 撮影</title>
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -20,13 +20,19 @@
   <main>
     <!-- パスワード入力 -->
     <section id="auth-section">
-      <div class="info">
-        <i data-lucide="shield-check" class="info-icon"></i>
-        <p>パスワードを入力してください</p>
+      <div class="info info-callout">
+        <i data-lucide="info" class="info-icon"></i>
+        <p>撮影を開始するにはパスワードを入力してください</p>
       </div>
-      <div class="input-group">
-        <i data-lucide="lock" class="input-icon"></i>
-        <input type="password" id="password-input" placeholder="パスワードを入力" autocomplete="current-password">
+      <div class="form-field">
+        <label for="password-input" class="field-label">
+          <i data-lucide="key-round" class="label-icon"></i>
+          <span>パスワード</span>
+        </label>
+        <div class="input-group">
+          <i data-lucide="lock" class="input-icon"></i>
+          <input type="password" id="password-input" placeholder="パスワードを入力" autocomplete="current-password">
+        </div>
       </div>
       <div id="auth-error" class="error-text" hidden></div>
       <div class="actions">
@@ -98,9 +104,14 @@
         </div>
       </div>
       <div id="review-thumbs" class="thumbs labeled"></div>
-      <div class="input-group textarea-group">
-        <i data-lucide="message-square" class="input-icon"></i>
-        <textarea id="note-input" placeholder="備考（任意）" rows="2"></textarea>
+      <div class="form-field">
+        <label for="note-input" class="field-label">
+          <i data-lucide="message-square" class="label-icon"></i>
+          <span>備考（任意）</span>
+        </label>
+        <div class="input-group textarea-group">
+          <textarea id="note-input" placeholder="メモや特記事項を入力してください" rows="2"></textarea>
+        </div>
       </div>
       <div class="actions">
         <button id="btn-retake" class="secondary">
