@@ -1,0 +1,192 @@
+<!-- File: viewer_script.html -->
+<script>
+  const state = {
+    password: null,
+    currentPage: 1,
+    totalPages: 1,
+  };
+
+  const $ = (id) => document.getElementById(id);
+
+  window.addEventListener('load', () => {
+    $('btn-login').addEventListener('click', login);
+    $('password-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') login();
+    });
+    $('btn-prev').addEventListener('click', () => loadPage(state.currentPage - 1));
+    $('btn-next').addEventListener('click', () => loadPage(state.currentPage + 1));
+    $('btn-back').addEventListener('click', showList);
+    $('btn-lightbox-close').addEventListener('click', closeLightbox);
+  });
+
+  function login() {
+    const pw = $('password-input').value;
+    if (!pw) return;
+    $('btn-login').disabled = true;
+    $('auth-error').hidden = true;
+
+    google.script.run
+      .withSuccessHandler((res) => {
+        $('btn-login').disabled = false;
+        if (res && res.ok) {
+          state.password = pw;
+          $('auth-section').hidden = true;
+          $('list-section').hidden = false;
+          loadPage(1);
+        } else {
+          $('auth-error').textContent = (res && res.error) || '認証に失敗しました';
+          $('auth-error').hidden = false;
+        }
+      })
+      .withFailureHandler((err) => {
+        $('btn-login').disabled = false;
+        $('auth-error').textContent = '通信エラー: ' + err.message;
+        $('auth-error').hidden = false;
+      })
+      .verifyPassword(pw);
+  }
+
+  function loadPage(page) {
+    if (page < 1) return;
+    $('btn-prev').disabled = true;
+    $('btn-next').disabled = true;
+
+    google.script.run
+      .withSuccessHandler((res) => {
+        if (!res.ok) {
+          showToast(res.error || '取得に失敗しました', 'error');
+          return;
+        }
+        renderList(res);
+      })
+      .withFailureHandler((err) => {
+        showToast('通信エラー: ' + err.message, 'error');
+      })
+      .listRecords(state.password, page);
+  }
+
+  function renderList(res) {
+    state.currentPage = res.page;
+    state.totalPages = res.totalPages;
+
+    const tbody = $('record-tbody');
+    tbody.innerHTML = '';
+
+    if (res.results.length === 0) {
+      $('record-table').hidden = true;
+      $('empty-message').hidden = false;
+    } else {
+      $('record-table').hidden = false;
+      $('empty-message').hidden = true;
+      res.results.forEach((r) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHtml(r.timestamp)}</td>
+          <td>${escapeHtml(r.barcode)}</td>
+          <td>${escapeHtml(r.note || '')}</td>
+        `;
+        tr.addEventListener('click', () => showDetail(r.row));
+        tbody.appendChild(tr);
+      });
+    }
+
+    $('page-info').textContent = `${res.page} / ${res.totalPages} ページ（全${res.totalCount}件）`;
+    $('btn-prev').disabled = res.page <= 1;
+    $('btn-next').disabled = res.page >= res.totalPages;
+  }
+
+  function showList() {
+    $('detail-section').hidden = true;
+    $('list-section').hidden = false;
+  }
+
+  function showDetail(rowNumber) {
+    showToast('読み込み中…');
+    google.script.run
+      .withSuccessHandler((res) => {
+        if (!res.ok) {
+          showToast(res.error || '取得に失敗しました', 'error');
+          return;
+        }
+        renderDetail(res.record);
+        $('list-section').hidden = true;
+        $('detail-section').hidden = false;
+      })
+      .withFailureHandler((err) => {
+        showToast('通信エラー: ' + err.message, 'error');
+      })
+      .getRecordByRow(state.password, rowNumber);
+  }
+
+  function renderDetail(record) {
+    $('detail-timestamp').textContent = record.timestamp;
+    $('detail-barcode').textContent = record.barcode;
+    $('detail-note').textContent = record.note || '(なし)';
+
+    const grid = $('detail-images');
+    grid.innerHTML = '';
+    record.images.forEach((img) => {
+      const fig = document.createElement('figure');
+      const imgEl = document.createElement('img');
+      imgEl.alt = img.label;
+      fig.appendChild(imgEl);
+
+      const cap = document.createElement('figcaption');
+      cap.innerHTML = `<span>${escapeHtml(img.label)}</span>`;
+      const dlLink = document.createElement('a');
+      dlLink.textContent = 'DL';
+      dlLink.href = '#';
+      cap.appendChild(dlLink);
+      fig.appendChild(cap);
+      grid.appendChild(fig);
+
+      loadImage(img.fileId, (dataUrl) => {
+        imgEl.src = dataUrl;
+        imgEl.addEventListener('click', () => openLightbox(dataUrl));
+        dlLink.href = dataUrl;
+        dlLink.download = `${record.barcode}_${img.label}.webp`;
+      });
+    });
+  }
+
+  function loadImage(fileId, cb) {
+    google.script.run
+      .withSuccessHandler((res) => {
+        if (res.ok) {
+          cb(`data:${res.mimeType};base64,${res.base64}`);
+        }
+      })
+      .withFailureHandler((err) => {
+        showToast('画像取得失敗: ' + err.message, 'error');
+      })
+      .getImage(state.password, fileId);
+  }
+
+  function openLightbox(dataUrl) {
+    $('lightbox-img').src = dataUrl;
+    $('lightbox').hidden = false;
+  }
+
+  function closeLightbox() {
+    $('lightbox').hidden = true;
+    $('lightbox-img').src = '';
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  let toastTimer = null;
+  function showToast(msg, type) {
+    const el = $('toast');
+    el.textContent = msg;
+    el.className = type || '';
+    el.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { el.hidden = true; }, 2500);
+  }
+</script>
