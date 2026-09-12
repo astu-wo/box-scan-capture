@@ -1,65 +1,123 @@
-< !DOCTYPE html >
-  <html lang="ja">
-    <head>
-      <meta charset="UTF-8">
-        <base target="_top">
-          <?!= include('viewer_style'); ?>
-        </head>
-        <body>
-          <header>
-            <h1>箱スキャン 閲覧</h1>
-          </header>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="color-scheme" content="light">
+  <base target="_top">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <?!= include('viewer_style'); ?>
+</head>
+<body>
+  <header>
+    <h1>
+      <i data-lucide="scan-barcode" class="header-icon"></i>
+      <span>箱スキャン 閲覧</span>
+    </h1>
+  </header>
 
-          <main>
-            <!-- パスワード入力 -->
-            <section id="auth-section">
-              <div class="info">
-                <p>共有パスワードを入力してください</p>
-              </div>
-              <input type="password" id="password-input" placeholder="パスワード" autocomplete="current-password">
-                <div id="auth-error" class="error-text" hidden></div>
-                <div class="actions">
-                  <button id="btn-login" class="primary">ログイン</button>
-                </div>
-            </section>
+  <main>
+    <!-- パスワード入力 -->
+    <section id="auth-section">
+      <div class="info info-callout">
+        <i data-lucide="info" class="info-icon"></i>
+        <p>閲覧を開始するにはパスワードを入力してください</p>
+      </div>
+      <div class="form-field">
+        <label for="password-input" class="field-label">
+          <i data-lucide="key-round" class="label-icon"></i>
+          <span>パスワード</span>
+        </label>
+        <div class="input-group">
+          <i data-lucide="lock" class="input-icon"></i>
+          <input type="password" id="password-input" placeholder="パスワードを入力" autocomplete="current-password">
+        </div>
+      </div>
+      <div id="auth-error" class="error-text" hidden></div>
+      <div class="actions">
+        <button id="btn-login" class="primary">
+          <i data-lucide="log-in"></i>
+          <span>ログイン</span>
+        </button>
+      </div>
+    </section>
 
-            <!-- 一覧 -->
-            <section id="list-section" hidden>
-              <table id="record-table">
-                <thead>
-                  <tr><th>タイムスタンプ</th><th>バーコード</th><th>備考</th></tr>
-                </thead>
-                <tbody id="record-tbody"></tbody>
-              </table>
-              <div id="empty-message" hidden>登録データがありません</div>
-              <div class="pagination">
-                <button id="btn-prev" class="secondary">前へ</button>
-                <span id="page-info"></span>
-                <button id="btn-next" class="secondary">次へ</button>
-              </div>
-            </section>
+    <!-- 一覧 -->
+    <section id="list-section" hidden>
+      <div class="section-title">
+        <i data-lucide="list"></i>
+        <h2>スキャン履歴</h2>
+      </div>
+      <div class="table-container">
+        <table id="record-table">
+          <thead>
+            <tr>
+              <th><div class="th-content"><i data-lucide="clock" class="th-icon"></i><span>タイムスタンプ</span></div></th>
+              <th><div class="th-content"><i data-lucide="barcode" class="th-icon"></i><span>バーコード</span></div></th>
+              <th><div class="th-content"><i data-lucide="message-square" class="th-icon"></i><span>備考</span></div></th>
+            </tr>
+          </thead>
+          <tbody id="record-tbody"></tbody>
+        </table>
+      </div>
+      <div id="empty-message" hidden>
+        <i data-lucide="inbox" class="empty-icon"></i>
+        <p>登録データがありません</p>
+      </div>
+      <div class="pagination">
+        <button id="btn-prev" class="secondary">
+          <i data-lucide="chevron-left"></i>
+          <span>前へ</span>
+        </button>
+        <span id="page-info"></span>
+        <button id="btn-next" class="secondary">
+          <span>次へ</span>
+          <i data-lucide="chevron-right"></i>
+        </button>
+      </div>
+    </section>
 
-            <!-- 詳細 -->
-            <section id="detail-section" hidden>
-              <div class="actions">
-                <button id="btn-back" class="secondary">← 一覧に戻る</button>
-              </div>
-              <div class="info">
-                <div>タイムスタンプ: <strong id="detail-timestamp"></strong></div>
-                <div>バーコード: <strong id="detail-barcode"></strong></div>
-                <div>備考: <span id="detail-note"></span></div>
-              </div>
-              <div id="detail-images" class="image-grid"></div>
-            </section>
+    <!-- 詳細 -->
+    <section id="detail-section" hidden>
+      <div class="actions">
+        <button id="btn-back" class="secondary">
+          <i data-lucide="arrow-left"></i>
+          <span>一覧に戻る</span>
+        </button>
+      </div>
+      <div class="info">
+        <div class="info-row">
+          <i data-lucide="clock" class="info-row-icon"></i>
+          <span>タイムスタンプ: <strong id="detail-timestamp"></strong></span>
+        </div>
+        <div class="info-row">
+          <i data-lucide="barcode" class="info-row-icon"></i>
+          <span>バーコード: <strong id="detail-barcode"></strong></span>
+        </div>
+        <div class="info-row">
+          <i data-lucide="message-square" class="info-row-icon"></i>
+          <span>備考: <span id="detail-note"></span></span>
+        </div>
+      </div>
+      <div class="section-title" style="margin-top: 18px;">
+        <i data-lucide="images"></i>
+        <h2>撮影画像</h2>
+      </div>
+      <div id="detail-images" class="image-grid"></div>
+    </section>
 
-            <div id="lightbox" class="lightbox" hidden>
-              <img id="lightbox-img" src="">
-                <button id="btn-lightbox-close" class="secondary">閉じる</button>
-            </div>
+    <div id="lightbox" class="lightbox" hidden>
+      <img id="lightbox-img" src="">
+      <button id="btn-lightbox-close" class="secondary">
+        <i data-lucide="x"></i>
+        <span>閉じる</span>
+      </button>
+    </div>
 
-            <div id="toast" hidden></div>
-          </main>
+    <div id="toast" hidden></div>
+  </main>
 
-          <?!= include('viewer_script'); ?>
-        </body>
-      </html>
+  <?!= include('viewer_script'); ?>
+</body>
+</html>

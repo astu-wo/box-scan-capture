@@ -8,7 +8,14 @@
 
   const $ = (id) => document.getElementById(id);
 
+  function renderIcons() {
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      window.lucide.createIcons();
+    }
+  }
+
   window.addEventListener('load', () => {
+    renderIcons();
     $('btn-login').addEventListener('click', login);
     $('password-input').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') login();
@@ -32,6 +39,7 @@
           state.password = pw;
           $('auth-section').hidden = true;
           $('list-section').hidden = false;
+          renderIcons();
           loadPage(1);
         } else {
           $('auth-error').textContent = (res && res.error) || '認証に失敗しました';
@@ -82,7 +90,7 @@
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>${escapeHtml(r.timestamp)}</td>
-          <td>${escapeHtml(r.barcode)}</td>
+          <td><strong>${escapeHtml(r.barcode)}</strong></td>
           <td>${escapeHtml(r.note || '')}</td>
         `;
         tr.addEventListener('click', () => showDetail(r.row));
@@ -93,11 +101,13 @@
     $('page-info').textContent = `${res.page} / ${res.totalPages} ページ（全${res.totalCount}件）`;
     $('btn-prev').disabled = res.page <= 1;
     $('btn-next').disabled = res.page >= res.totalPages;
+    renderIcons();
   }
 
   function showList() {
     $('detail-section').hidden = true;
     $('list-section').hidden = false;
+    renderIcons();
   }
 
   function showDetail(rowNumber) {
@@ -111,6 +121,7 @@
         renderDetail(res.record);
         $('list-section').hidden = true;
         $('detail-section').hidden = false;
+        renderIcons();
       })
       .withFailureHandler((err) => {
         showToast('通信エラー: ' + err.message, 'error');
@@ -134,7 +145,7 @@
       const cap = document.createElement('figcaption');
       cap.innerHTML = `<span>${escapeHtml(img.label)}</span>`;
       const dlLink = document.createElement('a');
-      dlLink.textContent = 'DL';
+      dlLink.innerHTML = '<i data-lucide="download"></i><span>保存</span>';
       dlLink.href = '#';
       cap.appendChild(dlLink);
       fig.appendChild(cap);
@@ -145,8 +156,10 @@
         imgEl.addEventListener('click', () => openLightbox(dataUrl));
         dlLink.href = dataUrl;
         dlLink.download = `${record.barcode}_${img.label}.webp`;
+        renderIcons();
       });
     });
+    renderIcons();
   }
 
   function loadImage(fileId, cb) {
@@ -165,6 +178,7 @@
   function openLightbox(dataUrl) {
     $('lightbox-img').src = dataUrl;
     $('lightbox').hidden = false;
+    renderIcons();
   }
 
   function closeLightbox() {
