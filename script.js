@@ -35,6 +35,7 @@ const $ = (id) => document.getElementById(id);
 
 // --- 起動 ---
 window.addEventListener('load', () => {
+  renderIcons();
   $('btn-login').addEventListener('click', login);
   $('password-input').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') login();
@@ -172,6 +173,13 @@ async function startScanner() {
   state.photos = [];
   $('scan-result').textContent = '読取待ち…';
   $('scan-result').classList.remove('hit');
+  const scanStatus = document.querySelector('.scan-status');
+  if (scanStatus) scanStatus.classList.remove('hit');
+  const scanIcon = $('scan-icon');
+  if (scanIcon) {
+    scanIcon.outerHTML = '<i data-lucide="scan" id="scan-icon"></i>';
+    renderIcons();
+  }
 
   stopStream(state.camStream);
   state.camStream = null;
@@ -212,8 +220,15 @@ async function scanLoop() {
 function onBarcodeDetected(value) {
   state.scanning = false;
   state.barcode = value;
-  $('scan-result').textContent = `✓ ${value}`;
+  $('scan-result').textContent = value;
   $('scan-result').classList.add('hit');
+  const scanStatus = document.querySelector('.scan-status');
+  if (scanStatus) scanStatus.classList.add('hit');
+  const scanIcon = $('scan-icon');
+  if (scanIcon) {
+    scanIcon.outerHTML = '<i data-lucide="check-circle-2" id="scan-icon"></i>';
+    renderIcons();
+  }
   if (navigator.vibrate) navigator.vibrate(100);
 
   setTimeout(() => {
@@ -274,10 +289,11 @@ async function takePhoto() {
 function updateFaceGuide() {
   const n = state.photos.length;
   $('btn-shutter').disabled = n >= MAX_PHOTOS;
+  const guideText = $('face-guide-text') || $('face-guide');
   if (n < MAX_PHOTOS) {
-    $('face-guide').textContent = `${n + 1}/4: ${FACE_LABELS[n]}を撮影`;
+    guideText.textContent = `${n + 1}/4: ${FACE_LABELS[n]}を撮影`;
   } else {
-    $('face-guide').textContent = '撮影完了';
+    guideText.textContent = '撮影完了';
   }
 }
 
@@ -439,7 +455,7 @@ async function showDrafts() {
     item.innerHTML = `
       <div>
         <div><strong>${d.barcode}</strong></div>
-        <div style="font-size:12px;color:#999;">${d.createdAt}</div>
+        <div class="draft-date">${d.createdAt}</div>
       </div>
     `;
     const actions = document.createElement('div');
@@ -447,7 +463,7 @@ async function showDrafts() {
 
     const resendBtn = document.createElement('button');
     resendBtn.className = 'primary';
-    resendBtn.textContent = '再送信';
+    resendBtn.innerHTML = '<i data-lucide="send"></i><span>再送信</span>';
     resendBtn.addEventListener('click', async () => {
       resendBtn.disabled = true;
       try {
@@ -474,8 +490,8 @@ async function showDrafts() {
     });
 
     const delBtn = document.createElement('button');
-    delBtn.className = 'secondary';
-    delBtn.textContent = '削除';
+    delBtn.className = 'secondary danger';
+    delBtn.innerHTML = '<i data-lucide="trash-2"></i><span>削除</span>';
     delBtn.addEventListener('click', async () => {
       await deleteDraft(d.id);
       showDrafts();
@@ -486,13 +502,21 @@ async function showDrafts() {
     item.appendChild(actions);
     list.appendChild(item);
   });
+  renderIcons();
 }
 
 // --- ユーティリティ ---
+function renderIcons() {
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons();
+  }
+}
+
 function showSection(id) {
   ['auth-section', 'scanner-section', 'capture-section', 'review-section', 'drafts-section'].forEach((s) => {
     $(s).hidden = (s !== id);
   });
+  renderIcons();
 }
 
 function stopStream(stream) {

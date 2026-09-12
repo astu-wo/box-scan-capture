@@ -5,70 +5,126 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>箱スキャン - 撮影</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
   <header>
-    <h1>箱スキャン</h1>
+    <h1>
+      <i data-lucide="scan-barcode" class="header-icon"></i>
+      <span>箱スキャン</span>
+    </h1>
   </header>
 
   <main>
     <!-- パスワード入力 -->
     <section id="auth-section">
       <div class="info">
-        <p>共有パスワードを入力してください</p>
+        <i data-lucide="shield-check" class="info-icon"></i>
+        <p>パスワードを入力してください</p>
       </div>
-      <input type="password" id="password-input" placeholder="パスワード" autocomplete="current-password">
+      <div class="input-group">
+        <i data-lucide="lock" class="input-icon"></i>
+        <input type="password" id="password-input" placeholder="パスワードを入力" autocomplete="current-password">
+      </div>
       <div id="auth-error" class="error-text" hidden></div>
       <div class="actions">
-        <button id="btn-login" class="primary">ログイン</button>
+        <button id="btn-login" class="primary">
+          <i data-lucide="log-in"></i>
+          <span>ログイン</span>
+        </button>
       </div>
     </section>
 
     <!-- スキャン -->
     <section id="scanner-section" hidden>
-      <video id="video" playsinline muted></video>
+      <div class="video-container">
+        <video id="video" playsinline muted></video>
+        <div class="scan-overlay">
+          <div class="scan-reticle"></div>
+        </div>
+      </div>
       <div class="scan-status">
+        <i data-lucide="scan" id="scan-icon"></i>
         <span id="scan-result">読取待ち…</span>
       </div>
       <div class="actions">
-        <button id="btn-rescan" class="secondary">再スキャン</button>
-        <button id="btn-drafts" class="secondary">下書き一覧</button>
+        <button id="btn-rescan" class="secondary">
+          <i data-lucide="refresh-cw"></i>
+          <span>再スキャン</span>
+        </button>
+        <button id="btn-drafts" class="secondary">
+          <i data-lucide="archive"></i>
+          <span>下書き一覧</span>
+        </button>
       </div>
     </section>
 
     <!-- 撮影 -->
     <section id="capture-section" hidden>
       <div class="info">
-        <div>バーコード: <strong id="confirmed-barcode"></strong></div>
-        <div id="face-guide" class="face-guide">1/4: 正面を撮影</div>
+        <div class="info-row">
+          <i data-lucide="barcode" class="info-row-icon"></i>
+          <span>バーコード: <strong id="confirmed-barcode"></strong></span>
+        </div>
+        <div id="face-guide" class="face-guide">
+          <i data-lucide="camera" class="guide-icon"></i>
+          <span id="face-guide-text">1/4: 正面を撮影</span>
+        </div>
       </div>
-      <video id="cam" playsinline muted></video>
+      <div class="video-container">
+        <video id="cam" playsinline muted></video>
+      </div>
       <div class="actions">
-        <button id="btn-shutter" class="primary">📷 撮影</button>
+        <button id="btn-shutter" class="primary shutter-btn">
+          <i data-lucide="camera"></i>
+          <span>撮影</span>
+        </button>
       </div>
       <div id="thumbs" class="thumbs"></div>
     </section>
 
     <!-- 確認 -->
     <section id="review-section" hidden>
-      <h2>確認</h2>
+      <div class="section-title">
+        <i data-lucide="check-circle-2"></i>
+        <h2>確認</h2>
+      </div>
       <div class="info">
-        <div>バーコード: <strong id="review-barcode"></strong></div>
+        <div class="info-row">
+          <i data-lucide="barcode" class="info-row-icon"></i>
+          <span>バーコード: <strong id="review-barcode"></strong></span>
+        </div>
       </div>
       <div id="review-thumbs" class="thumbs labeled"></div>
-      <textarea id="note-input" placeholder="備考（任意）" rows="2"></textarea>
+      <div class="input-group textarea-group">
+        <i data-lucide="message-square" class="input-icon"></i>
+        <textarea id="note-input" placeholder="備考（任意）" rows="2"></textarea>
+      </div>
       <div class="actions">
-        <button id="btn-retake" class="secondary">撮り直し</button>
-        <button id="btn-upload" class="primary">アップロード</button>
+        <button id="btn-retake" class="secondary">
+          <i data-lucide="rotate-ccw"></i>
+          <span>撮り直し</span>
+        </button>
+        <button id="btn-upload" class="primary">
+          <i data-lucide="upload-cloud"></i>
+          <span>アップロード</span>
+        </button>
       </div>
     </section>
 
     <!-- 下書き一覧 -->
     <section id="drafts-section" hidden>
-      <h2>下書き一覧</h2>
+      <div class="section-title">
+        <i data-lucide="archive"></i>
+        <h2>下書き一覧</h2>
+      </div>
       <div id="drafts-list"></div>
       <div class="actions">
-        <button id="btn-drafts-close" class="secondary">閉じる</button>
+        <button id="btn-drafts-close" class="secondary">
+          <i data-lucide="x"></i>
+          <span>閉じる</span>
+        </button>
       </div>
     </section>
 
