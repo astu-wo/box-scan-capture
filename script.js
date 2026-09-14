@@ -15,7 +15,7 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbwYffcivGulP2xIHiD-XuaZ
 
 const MAX_PHOTOS = 4;
 const IMAGE_MAX_EDGE = 2560;
-const IMAGE_QUALITY = 0.8;
+const IMAGE_QUALITY = 0.92;
 const FACE_LABELS = ['正面', '側面（右）', '背面', '側面（左）'];
 const DB_NAME = 'boxScanDraft';
 const STORE_NAME = 'drafts';
@@ -168,6 +168,8 @@ async function initApp() {
     startScanner();
   });
 
+  initCamFocus();
+
   startScanner(); // await しない
 
   const drafts = await getAllDrafts();
@@ -284,18 +286,29 @@ async function startCapture() {
 
 async function takePhoto() {
   if (state.photos.length >= MAX_PHOTOS) return;
-  const video = $('cam');
-  const { blob, dataUrl } = await captureAndEncode(video);
-  state.photos.push({ blob, dataUrl });
+  const btn = $('btn-shutter');
+  btn.disabled = true;
 
-  const img = document.createElement('img');
-  img.src = dataUrl;
-  $('thumbs').appendChild(img);
-  updateFaceGuide();
-  if (navigator.vibrate) navigator.vibrate(50);
+  try {
+    const video = $('cam');
+    const { blob, dataUrl } = await captureAndEncode(video);
+    state.photos.push({ blob, dataUrl });
 
-  if (state.photos.length >= MAX_PHOTOS) {
-    goReview();
+    const img = document.createElement('img');
+    img.src = dataUrl;
+    $('thumbs').appendChild(img);
+    updateFaceGuide();
+    if (navigator.vibrate) navigator.vibrate(50);
+
+    if (state.photos.length >= MAX_PHOTOS) {
+      goReview();
+    }
+  } catch (err) {
+    showToast('撮影エラー: ' + err.message, 'error');
+  } finally {
+    if (state.photos.length < MAX_PHOTOS) {
+      btn.disabled = false;
+    }
   }
 }
 
@@ -310,24 +323,99 @@ function updateFaceGuide() {
   }
 }
 
-// --- 画像処理 ---
+// --- 画像処理 (ImageCapture API対応で最高画質撮影) ---
 async function captureAndEncode(video) {
-  const vw = video.videoWidth;
-  const vh = video.videoHeight;
-  const scale = Math.min(1, IMAGE_MAX_EDGE / Math.max(vw, vh));
-  const w = Math.round(vw * scale);
-  const h = Math.round(vh * scale);
+  let sourceWidth, sourceHeight, drawSource;
+  const track = state.camStream && state.camStream.getVideoTracks()[0];
+  let photoBlob = null;
+
+  // 1. ImageCapture API が利用可能な場合は、カメラ本来の静止画センサー（HDR/高精細）を使用
+  if (window.ImageCapture && track) {
+    try {
+      const imageCapture = new ImageCapture(track);
+      photoBlob = await imageCapture.takePhoto();
+    } catch (e) {
+      console.warn('ImageCapture.takePhoto failed, falling back to video frame:', e);
+      photoBlob = null;
+    }
+  }
+
+  if (photoBlob) {
+    const bitmap = await createImageBitmap(photoBlob);
+    sourceWidth = bitmap.width;
+    sourceHeight = bitmap.height;
+    drawSource = bitmap;
+  } else {
+    // フォールバック: video要素のフレームから切り出し
+    sourceWidth = video.videoWidth;
+    sourceHeight = video.videoHeight;
+    drawSource = video;
+  }
+
+  const scale = Math.min(1, IMAGE_MAX_EDGE / Math.max(sourceWidth, sourceHeight));
+  const w = Math.round(sourceWidth * scale);
+  const h = Math.round(sourceHeight * scale);
 
   const canvas = document.createElement('canvas');
   canvas.width = w;
   canvas.height = h;
-  canvas.getContext('2d').drawImage(video, 0, 0, w, h);
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(drawSource, 0, 0, w, h);
+
+  if (drawSource && typeof drawSource.close === 'function') {
+    drawSource.close();
+  }
 
   const blob = await new Promise((res) =>
     canvas.toBlob(res, 'image/webp', IMAGE_QUALITY)
   );
   const dataUrl = await blobToDataUrl(blob);
   return { blob, dataUrl };
+}
+
+// --- タップでピント合わせ (フォーカスリング表示 & AF再トリガー) ---
+function initCamFocus() {
+  const container = $('cam-container');
+  if (!container) return;
+
+  container.addEventListener('click', async (e) => {
+    const rect = container.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    showFocusRing(x, y);
+
+    // カメラのフォーカス再トリガー
+    const track = state.camStream && state.camStream.getVideoTracks()[0];
+    if (track) {
+      try {
+        const capabilities = track.getCapabilities ? track.getCapabilities() : {};
+        if (capabilities.focusMode) {
+          if (capabilities.focusMode.includes('continuous')) {
+            await track.applyConstraints({ advanced: [{ focusMode: 'continuous' }] });
+          } else if (capabilities.focusMode.includes('single-shot')) {
+            await track.applyConstraints({ advanced: [{ focusMode: 'single-shot' }] });
+          }
+        }
+      } catch (_) {}
+    }
+  });
+}
+
+function showFocusRing(x, y) {
+  const ring = $('focus-indicator');
+  if (!ring) return;
+  ring.hidden = false;
+  ring.style.left = `${x}px`;
+  ring.style.top = `${y}px`;
+
+  ring.classList.remove('animate');
+  void ring.offsetWidth; // リフロー強制でアニメーション再起動
+  ring.classList.add('animate');
+
+  clearTimeout(ring._timer);
+  ring._timer = setTimeout(() => {
+    ring.hidden = true;
+  }, 750);
 }
 
 function blobToDataUrl(blob) {

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="color-scheme" content="light">
   <title>箱スキャン - 撮影</title>
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -75,8 +75,9 @@
           <span id="face-guide-text">1/4: 正面を撮影</span>
         </div>
       </div>
-      <div class="video-container">
+      <div class="video-container" id="cam-container">
         <video id="cam" playsinline muted></video>
+        <div id="focus-indicator" class="focus-indicator" hidden></div>
       </div>
       <div class="actions">
         <button id="btn-shutter" class="primary shutter-btn">
@@ -164,6 +165,6 @@
     </div>
   </main>
 
-  <script src="script.js?v=4"></script>
+  <script src="script.js?v=5"></script>
 </body>
 </html>

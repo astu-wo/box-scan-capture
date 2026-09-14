@@ -666,4 +666,44 @@ svg.lucide {
   height: 20px;
 }
 
+/* ==============================================================
+   フォーカスリング（タップでピント合わせアニメーション）
+   ============================================================== */
+.focus-indicator {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border: 2px solid #fbbf24; /* 黄色枠 */
+  border-radius: 8px;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(1.4);
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.6);
+  z-index: 10;
+}
+
+.focus-indicator.animate {
+  animation: focusRingAnim 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes focusRingAnim {
+  0% {
+    transform: translate(-50%, -50%) scale(1.4);
+    border-color: #fbbf24;
+    box-shadow: 0 0 14px rgba(251, 191, 36, 0.8);
+    opacity: 1;
+  }
+  65% {
+    transform: translate(-50%, -50%) scale(1);
+    border-color: #10b981; /* 合焦イメージのグリーン */
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.95);
+    border-color: #10b981;
+    opacity: 0;
+  }
+}
+
+
 
