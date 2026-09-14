@@ -40,3 +40,5 @@ yarn-error.log*
 
 # 参考文献
 reference/
+genesis-DESIGN.md
+.github/copilot-instructions.md
