@@ -14,7 +14,7 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbwYffcivGulP2xIHiD-XuaZ
 // ▲▲▲ ここをデプロイ後のWebアプリURLに書き換えてください ▲▲▲
 
 const MAX_PHOTOS = 4;
-const IMAGE_MAX_EDGE = 1600;
+const IMAGE_MAX_EDGE = 2560;
 const IMAGE_QUALITY = 0.8;
 const FACE_LABELS = ['正面', '側面（右）', '背面', '側面（左）'];
 const DB_NAME = 'boxScanDraft';
@@ -186,7 +186,11 @@ async function startScanner() {
 
   try {
     state.scanStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 } },
+      video: {
+        facingMode: { ideal: 'environment' },
+        width: { ideal: 1280 },
+        aspectRatio: { ideal: 4 / 3 },
+      },
       audio: false,
     });
     $('video').srcObject = state.scanStream;
@@ -253,8 +257,9 @@ async function startCapture() {
     state.camStream = await navigator.mediaDevices.getUserMedia({
       video: {
         facingMode: { ideal: 'environment' },
-        width: { ideal: 1920 },
-        height: { ideal: 1080 },
+        width: { ideal: 2560 },
+        height: { ideal: 1920 },
+        aspectRatio: { ideal: 4 / 3 },
       },
       audio: false,
     });
