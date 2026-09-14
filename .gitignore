@@ -37,3 +37,6 @@ yarn-error.log*
 
 # clasp (Google Apps Script CLI) 認証情報等
 .clasp.json
+
+# 参考文献
+reference/

@@ -158,6 +158,16 @@ async function initApp() {
     showSection('scanner-section');
   });
 
+  // バーコード確認モーダルのボタン
+  $('btn-modal-confirm').addEventListener('click', () => {
+    $('barcode-modal').hidden = true;
+    startCapture();
+  });
+  $('btn-modal-cancel').addEventListener('click', () => {
+    $('barcode-modal').hidden = true;
+    startScanner();
+  });
+
   startScanner(); // await しない
 
   const drafts = await getAllDrafts();
@@ -168,6 +178,7 @@ async function initApp() {
 
 // --- スキャナ起動 ---
 async function startScanner() {
+  $('barcode-modal').hidden = true;
   showSection('scanner-section');
   state.barcode = null;
   state.photos = [];
@@ -235,13 +246,10 @@ function onBarcodeDetected(value) {
   }
   if (navigator.vibrate) navigator.vibrate(100);
 
-  setTimeout(() => {
-    if (confirm(`バーコード: ${value}\nシリアル番号と一致しますか？`)) {
-      startCapture();
-    } else {
-      startScanner();
-    }
-  }, 300);
+  // カスタム確認モーダルを表示（大きなフォントで視認性向上）
+  $('modal-barcode-value').textContent = value;
+  $('barcode-modal').hidden = false;
+  renderIcons();
 }
 
 // --- 撮影 ---

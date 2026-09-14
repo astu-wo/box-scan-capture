@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="color-scheme" content="light">
   <title>箱スキャン - 撮影</title>
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=5">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -137,8 +137,33 @@
     </section>
 
     <div id="toast" hidden></div>
+
+    <!-- バーコード確認ダイアログ (フォント拡大カスタムモーダル) -->
+    <div id="barcode-modal" class="modal-overlay" hidden>
+      <div class="modal-card">
+        <div class="modal-icon-badge">
+          <i data-lucide="barcode"></i>
+        </div>
+        <h3 class="modal-title">バーコード読取完了</h3>
+        <div class="modal-body">
+          <p class="modal-label">読み取ったバーコード</p>
+          <div id="modal-barcode-value" class="modal-barcode-value"></div>
+          <p class="modal-question">シリアル番号と一致しますか？</p>
+        </div>
+        <div class="modal-actions">
+          <button id="btn-modal-cancel" class="secondary btn-large">
+            <i data-lucide="rotate-ccw"></i>
+            <span>やり直す</span>
+          </button>
+          <button id="btn-modal-confirm" class="primary btn-large">
+            <i data-lucide="camera"></i>
+            <span>一致（撮影へ）</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </main>
 
-  <script src="script.js?v=3"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>
