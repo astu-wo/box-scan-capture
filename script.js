@@ -197,17 +197,16 @@ async function startScanner() {
     renderIcons();
   }
 
-  stopStream(state.camStream);
-  state.camStream = null;
+  if (state.camStream) {
+    stopStream(state.camStream);
+    state.camStream = null;
+    await sleep(150);
+  }
 
   try {
-    state.scanStream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: { ideal: 'environment' },
-        width: { ideal: 1280 },
-        aspectRatio: { ideal: 4 / 3 },
-      },
-      audio: false,
+    state.scanStream = await getBackCameraStream({
+      width: { ideal: 1280 },
+      aspectRatio: { ideal: 4 / 3 },
     });
     $('video').srcObject = state.scanStream;
     await $('video').play();
@@ -272,22 +271,21 @@ function onBarcodeDetected(value) {
 
 // --- 撮影 ---
 async function startCapture() {
-  stopStream(state.scanStream);
-  state.scanStream = null;
+  if (state.scanStream) {
+    stopStream(state.scanStream);
+    state.scanStream = null;
+    await sleep(150);
+  }
   showSection('capture-section');
   $('confirmed-barcode').textContent = state.barcode;
   updateFaceGuide();
   $('thumbs').innerHTML = '';
 
   try {
-    state.camStream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: { ideal: 'environment' },
-        width: { ideal: 2560 },
-        height: { ideal: 1920 },
-        aspectRatio: { ideal: 4 / 3 },
-      },
-      audio: false,
+    state.camStream = await getBackCameraStream({
+      width: { ideal: 2560 },
+      height: { ideal: 1920 },
+      aspectRatio: { ideal: 4 / 3 },
     });
     $('cam').srcObject = state.camStream;
     await $('cam').play();
@@ -634,6 +632,34 @@ function showSection(id) {
     $(s).hidden = (s !== id);
   });
   renderIcons();
+}
+
+/**
+ * 背面カメラを優先・強制してメディアストリームを取得
+ * まず背面カメラ必須 (exact: 'environment') で取得を試み、
+ * 端末やブラウザが exact 制約に対応していない場合やPC等背面カメラがない環境では ideal でフォールバックする
+ * @param {MediaTrackConstraints} constraints
+ * @returns {Promise<MediaStream>}
+ */
+async function getBackCameraStream(constraints = {}) {
+  try {
+    return await navigator.mediaDevices.getUserMedia({
+      video: {
+        ...constraints,
+        facingMode: { exact: 'environment' },
+      },
+      audio: false,
+    });
+  } catch (err) {
+    // exact 制約でエラー（OverconstrainedError等）となった場合は ideal で再試行
+    return await navigator.mediaDevices.getUserMedia({
+      video: {
+        ...constraints,
+        facingMode: { ideal: 'environment' },
+      },
+      audio: false,
+    });
+  }
 }
 
 function stopStream(stream) {
