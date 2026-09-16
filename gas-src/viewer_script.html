@@ -4,6 +4,7 @@
     password: null,
     currentPage: 1,
     totalPages: 1,
+    currentRecord: null,
   };
 
   const $ = (id) => document.getElementById(id);
@@ -24,6 +25,13 @@
     $('btn-next').addEventListener('click', () => loadPage(state.currentPage + 1));
     $('btn-back').addEventListener('click', showList);
     $('btn-lightbox-close').addEventListener('click', closeLightbox);
+
+    // モーダル背景タップで閉じる
+    $('lightbox').addEventListener('click', (e) => {
+      if (e.target === $('lightbox')) {
+        closeLightbox();
+      }
+    });
   });
 
   function login() {
@@ -77,28 +85,48 @@
     state.currentPage = res.page;
     state.totalPages = res.totalPages;
 
-    const tbody = $('record-tbody');
-    tbody.innerHTML = '';
+    const listEl = $('record-list');
+    listEl.innerHTML = '';
 
-    if (res.results.length === 0) {
-      $('record-table').hidden = true;
+    if (!res.results || res.results.length === 0) {
+      listEl.hidden = true;
       $('empty-message').hidden = false;
     } else {
-      $('record-table').hidden = false;
+      listEl.hidden = false;
       $('empty-message').hidden = true;
+
       res.results.forEach((r) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${escapeHtml(r.timestamp)}</td>
-          <td><strong>${escapeHtml(r.barcode)}</strong></td>
-          <td>${escapeHtml(r.note || '')}</td>
+        const card = document.createElement('div');
+        card.className = 'record-card';
+        card.innerHTML = `
+          <div class="record-card-main">
+            <div class="record-card-header">
+              <span class="record-barcode-badge">
+                <i data-lucide="barcode"></i>
+                <span>${escapeHtml(r.barcode)}</span>
+              </span>
+            </div>
+            <div class="record-meta">
+              <i data-lucide="clock"></i>
+              <span>${escapeHtml(r.timestamp)}</span>
+            </div>
+            ${r.note ? `
+              <div class="record-note">
+                <i data-lucide="message-square"></i>
+                <span>${escapeHtml(r.note)}</span>
+              </div>
+            ` : ''}
+          </div>
+          <div class="record-arrow">
+            <i data-lucide="chevron-right"></i>
+          </div>
         `;
-        tr.addEventListener('click', () => showDetail(r.row));
-        tbody.appendChild(tr);
+        card.addEventListener('click', () => showDetail(r.row));
+        listEl.appendChild(card);
       });
     }
 
-    $('page-info').textContent = `${res.page} / ${res.totalPages} ページ（全${res.totalCount}件）`;
+    $('page-info').textContent = `${res.page} / ${res.totalPages}（全${res.totalCount}件）`;
     $('btn-prev').disabled = res.page <= 1;
     $('btn-next').disabled = res.page >= res.totalPages;
     renderIcons();
@@ -107,6 +135,7 @@
   function showList() {
     $('detail-section').hidden = true;
     $('list-section').hidden = false;
+    state.currentRecord = null;
     renderIcons();
   }
 
@@ -130,35 +159,58 @@
   }
 
   function renderDetail(record) {
+    state.currentRecord = record;
     $('detail-timestamp').textContent = record.timestamp;
     $('detail-barcode').textContent = record.barcode;
-    $('detail-note').textContent = record.note || '(なし)';
+
+    const noteRow = $('detail-note-row');
+    if (record.note) {
+      $('detail-note').textContent = record.note;
+      noteRow.hidden = false;
+    } else {
+      $('detail-note').textContent = '(なし)';
+      noteRow.hidden = false;
+    }
 
     const grid = $('detail-images');
     grid.innerHTML = '';
+
     record.images.forEach((img) => {
       const fig = document.createElement('figure');
-      const imgEl = document.createElement('img');
-      imgEl.alt = img.label;
-      fig.appendChild(imgEl);
+      fig.innerHTML = `
+        <div class="img-container">
+          <div class="img-skeleton">
+            <i data-lucide="image"></i>
+          </div>
+          <img alt="${escapeHtml(img.label)}" loading="lazy">
+        </div>
+        <figcaption>
+          <span class="face-name">${escapeHtml(img.label)}</span>
+          <a href="#" class="btn-mini-save" download="${escapeHtml(record.barcode)}_${escapeHtml(img.label)}.webp">
+            <i data-lucide="download"></i>
+            <span>保存</span>
+          </a>
+        </figcaption>
+      `;
 
-      const cap = document.createElement('figcaption');
-      cap.innerHTML = `<span>${escapeHtml(img.label)}</span>`;
-      const dlLink = document.createElement('a');
-      dlLink.innerHTML = '<i data-lucide="download"></i><span>保存</span>';
-      dlLink.href = '#';
-      cap.appendChild(dlLink);
-      fig.appendChild(cap);
+      const imgEl = fig.querySelector('img');
+      const skeletonEl = fig.querySelector('.img-skeleton');
+      const dlLink = fig.querySelector('.btn-mini-save');
+
       grid.appendChild(fig);
 
       loadImage(img.fileId, (dataUrl) => {
         imgEl.src = dataUrl;
-        imgEl.addEventListener('click', () => openLightbox(dataUrl));
+        imgEl.addEventListener('load', () => {
+          imgEl.classList.add('loaded');
+          skeletonEl.classList.add('hidden');
+        });
+        imgEl.addEventListener('click', () => openLightbox(dataUrl, img.label));
         dlLink.href = dataUrl;
-        dlLink.download = `${record.barcode}_${img.label}.webp`;
         renderIcons();
       });
     });
+
     renderIcons();
   }
 
@@ -175,8 +227,13 @@
       .getImage(state.password, fileId);
   }
 
-  function openLightbox(dataUrl) {
+  function openLightbox(dataUrl, label) {
     $('lightbox-img').src = dataUrl;
+    $('lightbox-label').textContent = label ? `${(state.currentRecord && state.currentRecord.barcode) || ''} - ${label}` : '撮影画像';
+    const dlBtn = $('lightbox-download-link');
+    dlBtn.href = dataUrl;
+    dlBtn.download = `${(state.currentRecord && state.currentRecord.barcode) || 'scan'}_${label || 'image'}.webp`;
+
     $('lightbox').hidden = false;
     renderIcons();
   }
@@ -197,9 +254,14 @@
   let toastTimer = null;
   function showToast(msg, type) {
     const el = $('toast');
-    el.textContent = msg;
+    let iconName = 'info';
+    if (type === 'error') iconName = 'alert-circle';
+    if (type === 'success') iconName = 'check-circle-2';
+
+    el.innerHTML = `<i data-lucide="${iconName}"></i><span>${escapeHtml(msg)}</span>`;
     el.className = type || '';
     el.hidden = false;
+    renderIcons();
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => { el.hidden = true; }, 2500);
   }

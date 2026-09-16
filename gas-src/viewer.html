@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23059669'/><path d='M16 7L7 12V22L16 27L25 22V12L16 7Z' stroke='white' stroke-width='2' fill='none' stroke-linejoin='round'/><path d='M16 16.5V27M16 16.5L7 12M16 16.5L25 12' stroke='white' stroke-width='1.8' stroke-linejoin='round'/><line x1='5' y1='17' x2='27' y2='17' stroke='%2334D399' stroke-width='2' stroke-linecap='round'/></svg>">
+  <title>写真データ閲覧 - 箱スキャン</title>
   <base target="_top">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -13,7 +15,7 @@
   <header>
     <h1>
       <i data-lucide="scan-barcode" class="header-icon"></i>
-      <span>箱スキャン 閲覧</span>
+      <span>写真データ閲覧</span>
     </h1>
   </header>
 
@@ -39,34 +41,31 @@
       </div>
     </section>
 
-    <!-- 一覧 -->
+    <!-- スキャン履歴一覧 -->
     <section id="list-section" hidden>
       <div class="section-title">
-        <i data-lucide="list"></i>
+        <i data-lucide="history"></i>
         <h2>スキャン履歴</h2>
       </div>
-      <div class="table-container">
-        <table id="record-table">
-          <thead>
-            <tr>
-              <th><div class="th-content"><i data-lucide="clock" class="th-icon"></i><span>タイムスタンプ</span></div></th>
-              <th><div class="th-content"><i data-lucide="barcode" class="th-icon"></i><span>バーコード</span></div></th>
-              <th><div class="th-content"><i data-lucide="message-square" class="th-icon"></i><span>備考</span></div></th>
-            </tr>
-          </thead>
-          <tbody id="record-tbody"></tbody>
-        </table>
-      </div>
+
+      <!-- カード型リストコンテナ -->
+      <div id="record-list" class="record-list"></div>
+
+      <!-- データなし表示 -->
       <div id="empty-message" hidden>
         <i data-lucide="inbox" class="empty-icon"></i>
         <p>登録データがありません</p>
       </div>
+
+      <!-- ページネーション -->
       <div class="pagination">
         <button id="btn-prev" class="secondary">
           <i data-lucide="chevron-left"></i>
           <span>前へ</span>
         </button>
-        <span id="page-info"></span>
+        <div class="page-badge">
+          <span id="page-info">1 / 1</span>
+        </div>
         <button id="btn-next" class="secondary">
           <span>次へ</span>
           <i data-lucide="chevron-right"></i>
@@ -74,43 +73,59 @@
       </div>
     </section>
 
-    <!-- 詳細 -->
+    <!-- 詳細画面 -->
     <section id="detail-section" hidden>
-      <div class="actions">
+      <div class="actions back-action">
         <button id="btn-back" class="secondary">
           <i data-lucide="arrow-left"></i>
           <span>一覧に戻る</span>
         </button>
       </div>
+
       <div class="info">
         <div class="info-row">
-          <i data-lucide="clock" class="info-row-icon"></i>
-          <span>タイムスタンプ: <strong id="detail-timestamp"></strong></span>
-        </div>
-        <div class="info-row">
           <i data-lucide="barcode" class="info-row-icon"></i>
-          <span>バーコード: <strong id="detail-barcode"></strong></span>
+          <span>バーコード: <strong id="detail-barcode" class="barcode-highlight"></strong></span>
         </div>
         <div class="info-row">
+          <i data-lucide="clock" class="info-row-icon"></i>
+          <span>タイムスタンプ: <span id="detail-timestamp"></span></span>
+        </div>
+        <div class="info-row" id="detail-note-row">
           <i data-lucide="message-square" class="info-row-icon"></i>
           <span>備考: <span id="detail-note"></span></span>
         </div>
       </div>
-      <div class="section-title" style="margin-top: 18px;">
+
+      <div class="section-title" style="margin-top: 20px;">
         <i data-lucide="images"></i>
         <h2>撮影画像</h2>
       </div>
       <div id="detail-images" class="image-grid"></div>
     </section>
 
-    <div id="lightbox" class="lightbox" hidden>
-      <img id="lightbox-img" src="">
-      <button id="btn-lightbox-close" class="secondary">
-        <i data-lucide="x"></i>
-        <span>閉じる</span>
-      </button>
+    <!-- ライトボックスモーダル（画像拡大表示） -->
+    <div id="lightbox" class="modal-overlay lightbox-overlay" hidden>
+      <div class="lightbox-card">
+        <div class="lightbox-header">
+          <span id="lightbox-label" class="lightbox-title">撮影画像</span>
+          <button id="btn-lightbox-close" class="lightbox-close-btn" aria-label="閉じる">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="lightbox-img-wrapper">
+          <img id="lightbox-img" src="" alt="拡大画像">
+        </div>
+        <div class="lightbox-actions">
+          <a id="lightbox-download-link" class="secondary btn-download" href="#" download>
+            <i data-lucide="download"></i>
+            <span>画像を保存</span>
+          </a>
+        </div>
+      </div>
     </div>
 
+    <!-- トースト通知 -->
     <div id="toast" hidden></div>
   </main>
 
