@@ -569,9 +569,10 @@
 
     .work-flow-legend {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 16px;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-left: 16px;
+      gap: 8px;
     }
 
     .workflow-tag {
@@ -1531,9 +1532,9 @@
       <div class="container hero-inner">
         <div class="hero-copy">
           <p class="eyebrow">利用マニュアル</p>
-          <h1 id="page-title"><span class="hero-title-line">箱をスキャン、</span><br><span
-              class="hero-title-line">PCで履歴確認。</span></h1>
-          <p class="hero-lede">バーコードを読み取り、箱の外観4面を決まった順番で撮影・登録するツールです。写真撮影はスマートフォン、撮影した写真の確認・保存はPCから行えます。</p>
+          <h1 id="page-title"><span class="hero-title-line">バーコードをスキャン、</span><br><span
+              class="hero-title-line">PCで証拠写真を確認。</span></h1>
+          <p class="hero-lede">バーコードを読み取り、箱の外観を撮影・登録するツールです。写真撮影はスマートフォン、撮影した写真の確認・保存はPCから行えます。</p>
           <div class="hero-actions">
             <a class="button button-primary" target="_blank" rel="noreferrer"
               href="https://astu-wo.github.io/box-scan-capture/">
@@ -1592,7 +1593,7 @@
             <div class="section-index">WORK FLOW</div>
             <div>
               <h2 id="work-flow-title">作業全体の流れ</h2>
-              <p class="section-description">箱の準備からバーコード確認・証拠写真の撮影、チェックシートのスキャンと写真共有までの順番です。</p>
+              <p class="section-description">箱の準備から、バーコード照合・証拠写真の撮影、チェックシートのスキャン、関係者への写真共有までの一連の流れです。</p>
             </div>
           </div>
 
@@ -1630,9 +1631,10 @@
 
                 <!-- Phase Header -->
                 <rect x="26" y="24" width="76" height="26" rx="6" fill="#0284c7" />
-                <text x="64" y="42" class="wf-mono" font-weight="700" font-size="11.5" fill="#ffffff"
-                  text-anchor="middle">01 準備</text>
-                <text x="110" y="42" font-weight="600" font-size="11" fill="#64748b">事前準備作業</text>
+                <text x="64" y="37" class="wf-mono" font-weight="700" font-size="11.5" fill="#ffffff"
+                  text-anchor="middle" dominant-baseline="middle">01 準備</text>
+                <text x="110" y="37" font-weight="600" font-size="11" fill="#64748b"
+                  dominant-baseline="middle">事前準備作業</text>
 
                 <!-- Step 1 Card -->
                 <g filter="url(#wf-card-shadow)">
@@ -1670,7 +1672,7 @@
                   <circle cx="50" cy="231" r="12" fill="#0284c7" />
                   <text x="50" y="235.5" class="wf-mono" font-weight="700" font-size="11.5" fill="#ffffff"
                     text-anchor="middle">3</text>
-                  <text x="72" y="225" font-weight="600" font-size="12" fill="#0f172a">バーコードラベル張替え</text>
+                  <text x="72" y="225" font-weight="600" font-size="12" fill="#0f172a">バーコードラベル貼り替え</text>
                   <text x="72" y="243" font-weight="500" font-size="10" fill="#64748b">（ドイツ外箱 → 大幸外箱）</text>
                 </g>
 
@@ -1685,12 +1687,9 @@
                   <circle cx="50" cy="302" r="12" fill="#0284c7" />
                   <text x="50" y="306.5" class="wf-mono" font-weight="700" font-size="11.5" fill="#ffffff"
                     text-anchor="middle">4</text>
-                  <text x="72" y="307" font-weight="600" font-size="12.5" fill="#0f172a">外箱ラベルを貼ってもらう</text>
+                  <text x="72" y="307" font-weight="600" font-size="12.5" fill="#0f172a">外箱ラベル貼付</text>
                 </g>
 
-                <!-- Connector 01 -> 02 -->
-                <path d="M 258 302 C 285 302, 285 200, 303 194" stroke="#0284c7" stroke-width="2.5"
-                  stroke-dasharray="5,4" fill="none" marker-end="url(#wf-arrow-blue)" />
                 <line x1="272" y1="37" x2="303" y2="37" stroke="#0284c7" stroke-width="2.5"
                   marker-end="url(#wf-arrow-blue)" />
 
@@ -1702,11 +1701,12 @@
 
                 <!-- Phase Header -->
                 <rect x="324" y="24" width="102" height="26" rx="6" fill="#d97706" />
-                <text x="375" y="42" class="wf-mono" font-weight="700" font-size="11.5" fill="#ffffff"
-                  text-anchor="middle">02 確認・撮影</text>
+                <text x="375" y="37" class="wf-mono" font-weight="700" font-size="11.5" fill="#ffffff"
+                  text-anchor="middle" dominant-baseline="middle">02 確認・撮影</text>
                 <rect x="432" y="24" width="124" height="26" rx="13" fill="#fef3c7" stroke="#f59e0b"
                   stroke-width="1.2" />
-                <text x="494" y="42" font-weight="700" font-size="10.5" fill="#92400e" text-anchor="middle">★
+                <text x="494" y="37" font-weight="700" font-size="10.5" fill="#92400e" text-anchor="middle"
+                  dominant-baseline="middle">★
                   本WEBアプリ使用</text>
 
                 <!-- Core Step 5 Card -->
@@ -1738,14 +1738,11 @@
                   <!-- Sub-block B: 4-side Photos -->
                   <rect x="338" y="252" width="204" height="60" rx="7" fill="#fefce8" stroke="#fef08a"
                     stroke-width="1" />
-                  <text x="350" y="272" font-weight="700" font-size="11.5" fill="#854d0e">② 外観4面の連続撮影</text>
+                  <text x="350" y="272" font-weight="700" font-size="11.5" fill="#854d0e">② 外観4面の写真撮影</text>
                   <text x="350" y="291" font-weight="500" font-size="10" fill="#a16207">天面 → 正面 → 左側面 → 右側面</text>
                   <text x="350" y="304" font-weight="500" font-size="9.5" fill="#b45309">（ガイド枠に合わせてシャッター）</text>
                 </g>
 
-                <!-- Connector 02 -> 03 -->
-                <path d="M 556 195 C 576 195, 582 96, 602 96" stroke="#16a34a" stroke-width="2.5" stroke-dasharray="5,4"
-                  fill="none" marker-end="url(#wf-arrow-green)" />
                 <line x1="570" y1="37" x2="601" y2="37" stroke="#16a34a" stroke-width="2.5"
                   marker-end="url(#wf-arrow-green)" />
 
@@ -1757,9 +1754,10 @@
 
                 <!-- Phase Header -->
                 <rect x="622" y="24" width="94" height="26" rx="6" fill="#16a34a" />
-                <text x="669" y="42" class="wf-mono" font-weight="700" font-size="11.5" fill="#ffffff"
-                  text-anchor="middle">03 完了処理</text>
-                <text x="724" y="42" font-weight="600" font-size="11" fill="#15803d">後続作業・共有</text>
+                <text x="669" y="37" class="wf-mono" font-weight="700" font-size="11.5" fill="#ffffff"
+                  text-anchor="middle" dominant-baseline="middle">03 完了処理</text>
+                <text x="724" y="37" font-weight="600" font-size="11" fill="#15803d"
+                  dominant-baseline="middle">後続作業・共有</text>
 
                 <!-- Step 6 Card -->
                 <g filter="url(#wf-card-shadow)">
@@ -1811,20 +1809,6 @@
                   すべての工程が完了</text>
               </svg>
             </div>
-
-            <figcaption class="work-flow-caption">
-              <div class="work-flow-legend">
-                <span class="workflow-tag" style="color: #0284c7;"><span
-                    style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#0284c7;"></span> 01
-                  準備：梱包・ラベル張り替え</span>
-                <span class="workflow-tag" style="color: #d97706;"><span
-                    style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#f59e0b;"></span> ★ 02
-                  確認・撮影：本WEBアプリを使用（核心作業）</span>
-                <span class="workflow-tag" style="color: #16a34a;"><span
-                    style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#16a34a;"></span> 03
-                  完了処理：シート記入・スキャン・写真共有</span>
-              </div>
-            </figcaption>
           </figure>
         </section>
 
@@ -1916,7 +1900,7 @@
             <div class="preflight-item">
               <span class="preflight-icon"><i data-lucide="wifi" aria-hidden="true"></i></span>
               <h3>通信環境</h3>
-              <p>写真の撮影自体はオフラインでも行えますが、サーバーへのデータ送信（アップロード）や履歴閲覧にはネット接続が必要です。</p>
+              <p>写真の撮影自体はオフラインでも可能ですが、サーバーへのデータ送信（アップロード）や履歴の閲覧にはインターネット接続が必要です。</p>
             </div>
           </div>
         </section>
@@ -1961,7 +1945,7 @@
                   <p>「読取待ち…」の画面で、箱のバーコード（Code 39形式）を画面中央の枠内に合わせます。認識されると読み取り結果が表示され、確認ダイアログが開きます。</p>
                   <ul class="step-detail">
                     <li><i data-lucide="scan-line"
-                        aria-hidden="true"></i><span>バーコード全体が枠内にきれいに収まるように構え、手ブレを止めてピントを合わせます。</span></li>
+                      aria-hidden="true"></i><span>バーコード全体が枠内にきれいに収まるように構え、手ブレを抑えてピントを合わせます。</span></li>
                     <li><i data-lucide="sun-medium"
                         aria-hidden="true"></i><span>照明の反射や影で認識しづらい場合は、箱の角度や端末との距離を少し変えてみてください。</span></li>
                     <li><i data-lucide="badge-check"
@@ -2012,7 +1996,7 @@
                     <li><i data-lucide="file-pen-line"
                         aria-hidden="true"></i><span>備考は任意入力です。箱の傷・汚れや特記事項など、後で確認したい内容を記録できます。</span></li>
                     <li><i data-lucide="rotate-ccw"
-                        aria-hidden="true"></i><span>「撮り直し」をタップすると、撮影した4枚がすべてクリアされ、最初の正面から撮り直せます。</span></li>
+                      aria-hidden="true"></i><span>「撮り直し」をタップすると、撮影した4枚の写真が破棄され、最初の正面から撮影をやり直せます。</span></li>
                     <li><i data-lucide="check-circle-2"
                         aria-hidden="true"></i><span>送信が成功すると「アップロード完了」と表示され、次の箱のスキャン画面に戻ります。</span></li>
                   </ul>
@@ -2098,7 +2082,7 @@
             <div class="section-index">VIEWER</div>
             <div>
               <h2 id="viewer-title">PCで登録履歴を確認する</h2>
-              <p class="section-description">PCの大画面で、登録日時・バーコード・備考の一覧をすばやく把握し、撮影された4面の写真を詳しく確認できます。</p>
+              <p class="section-description">PCのブラウザから登録履歴（日時・バーコード・備考）を一覧表示し、撮影された4面の写真を詳細に確認できます。</p>
             </div>
           </div>
           <div class="viewer-flow">
@@ -2180,11 +2164,11 @@
               <summary>「このブラウザはBarcodeDetector非対応です」と表示される</summary>
               <div class="trouble-answer">
                 <p>本ツールの撮影機能は、ブラウザ標準のバーコード認識機能を利用しています。Android版 Google Chrome の最新版で開き直してください。</p>
-                <p>※なお、PCの閲覧画面ではバーコード認識を使用しないため、主要な各種ブラウザ（Edge、Safari、Firefoxなど）で問題なくご利用いただけます。</p>
+                <p>※PCの閲覧画面ではバーコード認識機能を使用しないため、主要ブラウザ（Edge、Safari、Firefoxなど）でそのままご利用いただけます。</p>
               </div>
             </details>
             <details>
-              <summary>写真のアップロードに失敗してしまう</summary>
+              <summary>写真のアップロードに失敗する</summary>
               <div class="trouble-answer">
                 <p>画面に「下書きに保存しました」と表示された場合、撮影したデータはスマホ内に一時保存されています。電波状況が改善してから、同じブラウザで「下書き一覧」を開き、「再送信」を行ってください。</p>
                 <p>下書きへの保存自体も失敗する場合は、スマートフォンの空き容量不足の可能性があります。不要なデータを整理するか、管理担当者へお問い合わせください。</p>
@@ -2230,7 +2214,7 @@
             <div class="section-index">ARCHITECTURE</div>
             <div>
               <h2 id="architecture-title">システム内部構成（連携図）</h2>
-              <p class="section-description">現場の高速なカメラ・バーコード操作と、クラウドでの安全なデータ保管・履歴閲覧を両立する4大コンポーネントの連携アーキテクチャです。</p>
+              <p class="section-description">現場での高速なカメラ・バーコード操作と、クラウド上での安全なデータ保管・閲覧を両立するためのシステム構成および連携フローです。</p>
             </div>
           </div>
 
@@ -2401,7 +2385,7 @@
               <p>現場の即応性と運用の手軽さを両立するため、用途に応じた適材適所の技術選定を行っています。</p>
               <ul class="route-checklist">
                 <li><i data-lucide="check" aria-hidden="true"></i><span><strong>カメラ制限の回避（GitHub Pages）：</strong>ブラウザのセキュリティ仕様上、GASの埋め込み環境ではカメラ起動がブロックされるため、撮影画面のみ独立ドメイン（GitHub Pages）で動かしています。</span></li>
-                <li><i data-lucide="check" aria-hidden="true"></i><span><strong>サーバーレス・無料運用（GAS）：</strong>専用のWebサーバーやクラウド契約を別途契約することなく、Googleアカウントの標準機能だけでセキュアに運用可能です。</span></li>
+                <li><i data-lucide="check" aria-hidden="true"></i><span><strong>サーバーレス・無料運用（GAS）：</strong>外部のWebサーバーやクラウドサービスを別途契約することなく、社内Googleアカウントの標準機能のみで安全に運用可能です。</span></li>
                 <li><i data-lucide="check" aria-hidden="true"></i><span><strong>テキストと大容量データの分離（Sheets ＋ Drive）：</strong>検索や一覧表示を高速化するため、メタデータはスプレッドシートへ、大容量の写真画像はGoogleドライブへと自動で分離保存されます。</span></li>
               </ul>
             </div>

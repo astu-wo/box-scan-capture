@@ -154,18 +154,38 @@ video {
 }
 
 #scan-result.hit {
-  color: var(--primary);
   font-weight: 700;
   font-size: 18px;
 }
 
-.scan-status.hit {
+#scan-result {
+  transition: color 0.15s ease;
+}
+
+#scan-result.hit.valid {
+  color: var(--primary);
+}
+
+#scan-result.hit.invalid {
+  color: var(--danger);
+}
+
+.scan-status.hit.valid {
   border-color: var(--primary);
   background: var(--primary-light);
 }
 
-.scan-status.hit svg {
+.scan-status.hit.invalid {
+  border-color: var(--danger);
+  background: var(--danger-light);
+}
+
+.scan-status.hit.valid svg {
   color: var(--primary);
+}
+
+.scan-status.hit.invalid svg {
+  color: var(--danger);
 }
 
 /* 情報カード（Info / Notice）: 左アクセントバーと淡色背景で入力欄と明確に差別化 */
@@ -632,6 +652,19 @@ svg.lucide {
   word-break: break-all;
   margin-bottom: 14px;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.modal-barcode-value.valid {
+  color: var(--primary-hover);
+  background: var(--primary-light);
+  border-color: #a7f3d0;
+}
+
+.modal-barcode-value.invalid {
+  color: var(--danger-hover);
+  background: var(--danger-light);
+  border-color: #fecaca;
 }
 
 .modal-question {

@@ -20,6 +20,7 @@ const FACE_LABELS = ['正面', '側面（右）', '背面', '側面（左）'];
 const DB_NAME = 'boxScanDraft';
 const STORE_NAME = 'drafts';
 const GAS_TIMEOUT_MS = 30000;
+const EXPECTED_BARCODE_LENGTH = 13;
 
 const state = {
   password: null,
@@ -185,9 +186,10 @@ async function startScanner() {
   state.barcode = null;
   state.photos = [];
   $('scan-result').textContent = '読取待ち…';
-  $('scan-result').classList.remove('hit');
+  $('scan-result').classList.remove('hit', 'valid', 'invalid');
   const scanStatus = document.querySelector('.scan-status');
-  if (scanStatus) scanStatus.classList.remove('hit');
+  if (scanStatus) scanStatus.classList.remove('hit', 'valid', 'invalid');
+  $('modal-barcode-value').classList.remove('valid', 'invalid');
   const scanIcon = $('scan-icon');
   if (scanIcon) {
     scanIcon.outerHTML = '<i data-lucide="scan" id="scan-icon"></i>';
@@ -237,10 +239,17 @@ async function scanLoop() {
 function onBarcodeDetected(value) {
   state.scanning = false;
   state.barcode = value;
+  const isExpectedLength = typeof value === 'string' && value.length === EXPECTED_BARCODE_LENGTH;
   $('scan-result').textContent = value;
   $('scan-result').classList.add('hit');
+  $('scan-result').classList.toggle('valid', isExpectedLength);
+  $('scan-result').classList.toggle('invalid', !isExpectedLength);
   const scanStatus = document.querySelector('.scan-status');
-  if (scanStatus) scanStatus.classList.add('hit');
+  if (scanStatus) {
+    scanStatus.classList.add('hit');
+    scanStatus.classList.toggle('valid', isExpectedLength);
+    scanStatus.classList.toggle('invalid', !isExpectedLength);
+  }
   const scanIcon = $('scan-icon');
   if (scanIcon) {
     scanIcon.outerHTML = '<i data-lucide="check-circle-2" id="scan-icon"></i>';
@@ -249,7 +258,10 @@ function onBarcodeDetected(value) {
   if (navigator.vibrate) navigator.vibrate(100);
 
   // カスタム確認モーダルを表示（大きなフォントで視認性向上）
-  $('modal-barcode-value').textContent = value;
+  const modalBarcodeValue = $('modal-barcode-value');
+  modalBarcodeValue.textContent = value;
+  modalBarcodeValue.classList.toggle('valid', isExpectedLength);
+  modalBarcodeValue.classList.toggle('invalid', !isExpectedLength);
   $('barcode-modal').hidden = false;
   renderIcons();
 }
