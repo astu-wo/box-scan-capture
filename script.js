@@ -21,6 +21,7 @@ const DB_NAME = 'boxScanDraft';
 const STORE_NAME = 'drafts';
 const GAS_TIMEOUT_MS = 30000;
 const EXPECTED_BARCODE_LENGTH = 13;
+const EXPECTED_BARCODE_PREFIX = 'C';
 
 const state = {
   password: null,
@@ -239,16 +240,19 @@ async function scanLoop() {
 function onBarcodeDetected(value) {
   state.scanning = false;
   state.barcode = value;
-  const isExpectedLength = typeof value === 'string' && value.length === EXPECTED_BARCODE_LENGTH;
+  // 13桁かつ先頭が'C'であることをチェック
+  const isValidFormat = typeof value === 'string' &&
+    value.length === EXPECTED_BARCODE_LENGTH &&
+    value.startsWith(EXPECTED_BARCODE_PREFIX);
   $('scan-result').textContent = value;
   $('scan-result').classList.add('hit');
-  $('scan-result').classList.toggle('valid', isExpectedLength);
-  $('scan-result').classList.toggle('invalid', !isExpectedLength);
+  $('scan-result').classList.toggle('valid', isValidFormat);
+  $('scan-result').classList.toggle('invalid', !isValidFormat);
   const scanStatus = document.querySelector('.scan-status');
   if (scanStatus) {
     scanStatus.classList.add('hit');
-    scanStatus.classList.toggle('valid', isExpectedLength);
-    scanStatus.classList.toggle('invalid', !isExpectedLength);
+    scanStatus.classList.toggle('valid', isValidFormat);
+    scanStatus.classList.toggle('invalid', !isValidFormat);
   }
   const scanIcon = $('scan-icon');
   if (scanIcon) {
@@ -260,8 +264,8 @@ function onBarcodeDetected(value) {
   // カスタム確認モーダルを表示（大きなフォントで視認性向上）
   const modalBarcodeValue = $('modal-barcode-value');
   modalBarcodeValue.textContent = value;
-  modalBarcodeValue.classList.toggle('valid', isExpectedLength);
-  modalBarcodeValue.classList.toggle('invalid', !isExpectedLength);
+  modalBarcodeValue.classList.toggle('valid', isValidFormat);
+  modalBarcodeValue.classList.toggle('invalid', !isValidFormat);
   $('barcode-modal').hidden = false;
   renderIcons();
 }
