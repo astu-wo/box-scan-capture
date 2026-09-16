@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   <meta name="description" content="「箱スキャン」の操作マニュアルです。バーコードの読み取りから外観4面の撮影、通信エラー時の下書き再送信、PCでの履歴・写真閲覧手順まで分かりやすく解説します。">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%236366F1'/><path d='M16 7L7 12V22L16 27L25 22V12L16 7Z' stroke='white' stroke-width='2' fill='none' stroke-linejoin='round'/><path d='M16 16.5V27M16 16.5L7 12M16 16.5L25 12' stroke='white' stroke-width='1.8' stroke-linejoin='round'/><line x1='5' y1='17' x2='27' y2='17' stroke='%23EF4444' stroke-width='2' stroke-linecap='round'/></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%236366F1'/><path d='M16 7L7 12V22L16 27L25 22V12L16 7Z' stroke='white' stroke-width='2' fill='none' stroke-linejoin='round'/><path d='M16 16.5V27M16 16.5L7 12M16 16.5L25 12' stroke='white' stroke-width='1.8' stroke-linejoin='round'/><line x1='5' y1='17' x2='27' y2='17' stroke='%23EF4444' stroke-width='2' stroke-linecap='round'/></svg>">
   <title>箱スキャン | 操作マニュアル</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -929,56 +930,6 @@
       font-size: 13px;
     }
 
-    .face-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .face-card {
-      overflow: hidden;
-      border: 1px solid var(--border);
-      border-radius: var(--card-radius, 12px);
-      background: var(--surface);
-    }
-
-    .face-visual {
-      display: grid;
-      min-height: 148px;
-      place-items: center;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface-alt);
-      color: var(--neutral);
-    }
-
-    .face-visual svg {
-      width: 36px;
-      height: 36px;
-      stroke-width: 1.25;
-    }
-
-    .face-card:nth-child(2) .face-visual,
-    .face-card:nth-child(4) .face-visual {
-      background: #F7F7FA;
-    }
-
-    .face-label {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 13px 14px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .face-label span {
-      color: var(--text-secondary);
-      font-family: var(--font-code);
-      font-size: 10px;
-      font-weight: 400;
-    }
-
     .draft-layout {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1086,6 +1037,41 @@
       margin: 0;
       color: var(--text-secondary);
       font-size: 13px;
+    }
+
+    .viewer-screenshot-figure {
+      margin: 24px 0 28px;
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius, 12px);
+      overflow: hidden;
+      background: var(--surface);
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+    }
+
+    .viewer-screenshot-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .viewer-screenshot-figure figcaption {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--surface-alt);
+      border-top: 1px solid var(--border);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .viewer-screenshot-figure figcaption svg {
+      width: 16px;
+      height: 16px;
+      color: var(--primary);
+      flex-shrink: 0;
     }
 
     .data-table-wrap {
@@ -1381,14 +1367,6 @@
         display: none;
       }
 
-      .face-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .face-visual {
-        min-height: 120px;
-      }
-
       .step-item {
         grid-template-columns: 40px minmax(0, 1fr);
         gap: 14px;
@@ -1520,7 +1498,8 @@
         <a href="#architecture">内部構成</a>
       </nav>
       <div class="header-actions">
-        <a class="header-link" target="_blank" rel="noreferrer" href="https://astu-wo.github.io/box-scan-capture/" title="撮影画面を開く">
+        <a class="header-link" target="_blank" rel="noreferrer" href="https://astu-wo.github.io/box-scan-capture/"
+          title="撮影画面を開く">
           <i data-lucide="camera" aria-hidden="true"></i>
           <span>撮影画面</span>
         </a>
@@ -1688,7 +1667,7 @@
                   <circle cx="50" cy="302" r="12" fill="#0284c7" />
                   <text x="50" y="306.5" class="wf-mono" font-weight="700" font-size="11.5" fill="#ffffff"
                     text-anchor="middle">4</text>
-                  <text x="72" y="307" font-weight="600" font-size="12.5" fill="#0f172a">外箱ラベル貼付</text>
+                  <text x="72" y="307" font-weight="600" font-size="12.5" fill="#0f172a">外箱ラベルを貼ってもらう</text>
                 </g>
 
                 <line x1="272" y1="37" x2="303" y2="37" stroke="#0284c7" stroke-width="2.5"
@@ -1946,7 +1925,7 @@
                   <p>「読取待ち…」の画面で、箱のバーコード（Code 39形式）を画面中央の枠内に合わせます。認識されると読み取り結果が表示され、確認ダイアログが開きます。</p>
                   <ul class="step-detail">
                     <li><i data-lucide="scan-line"
-                      aria-hidden="true"></i><span>バーコード全体が枠内にきれいに収まるように構え、手ブレを抑えてピントを合わせます。</span></li>
+                        aria-hidden="true"></i><span>バーコード全体が枠内にきれいに収まるように構え、手ブレを抑えてピントを合わせます。</span></li>
                     <li><i data-lucide="sun-medium"
                         aria-hidden="true"></i><span>照明の反射や影で認識しづらい場合は、箱の角度や端末との距離を少し変えてみてください。</span></li>
                     <li><i data-lucide="badge-check"
@@ -1997,7 +1976,7 @@
                     <li><i data-lucide="file-pen-line"
                         aria-hidden="true"></i><span>備考は任意入力です。箱の傷・汚れや特記事項など、後で確認したい内容を記録できます。</span></li>
                     <li><i data-lucide="rotate-ccw"
-                      aria-hidden="true"></i><span>「撮り直し」をタップすると、撮影した4枚の写真が破棄され、最初の正面から撮影をやり直せます。</span></li>
+                        aria-hidden="true"></i><span>「撮り直し」をタップすると、撮影した4枚の写真が破棄され、最初の正面から撮影をやり直せます。</span></li>
                     <li><i data-lucide="check-circle-2"
                         aria-hidden="true"></i><span>送信が成功すると「アップロード完了」と表示され、次の箱のスキャン画面に戻ります。</span></li>
                   </ul>
@@ -2010,34 +1989,6 @@
             <i data-lucide="triangle-alert" aria-hidden="true"></i>
             <p><strong>重要ポイント:</strong>
               バーコードを読み取った段階では、まだ登録完了ではありません。誤登録を防ぐため、画面に表示された値と箱に印字されているシリアル番号が一致していることを必ず目視で確認してください。</p>
-          </div>
-        </section>
-
-        <section class="manual-section" id="photo-order" aria-labelledby="photo-order-title">
-          <div class="section-heading">
-            <div class="section-index">PHOTO ORDER</div>
-            <div>
-              <h2 id="photo-order-title">撮影順のルール（4面）</h2>
-              <p class="section-description">撮影した順番のままデータが保存されます。箱を回転させながら、必ず以下の順番（時計回り）で撮影してください。</p>
-            </div>
-          </div>
-          <div class="face-grid" aria-label="撮影する4つの面">
-            <div class="face-card">
-              <div class="face-visual"><i data-lucide="box" aria-hidden="true"></i></div>
-              <div class="face-label"><span>01</span>正面</div>
-            </div>
-            <div class="face-card">
-              <div class="face-visual"><i data-lucide="box" aria-hidden="true"></i></div>
-              <div class="face-label"><span>02</span>右側面</div>
-            </div>
-            <div class="face-card">
-              <div class="face-visual"><i data-lucide="box" aria-hidden="true"></i></div>
-              <div class="face-label"><span>03</span>背面</div>
-            </div>
-            <div class="face-card">
-              <div class="face-visual"><i data-lucide="box" aria-hidden="true"></i></div>
-              <div class="face-label"><span>04</span>左側面</div>
-            </div>
           </div>
         </section>
 
@@ -2103,6 +2054,14 @@
               <p>詳細画面で4面の写真が並びます。画像クリックで拡大、必要に応じてダウンロードできます。</p>
             </div>
           </div>
+
+          <figure class="viewer-screenshot-figure">
+            <img src="images/sample1.webp" alt="写真データ閲覧 詳細画面の表示例（バーコード・タイムスタンプ・備考・4面写真）" width="1372" height="1064" loading="lazy">
+            <figcaption>
+              <i data-lucide="eye" aria-hidden="true"></i>
+              <span>登録履歴の詳細画面：一覧からデータを選ぶと、バーコード・タイムスタンプ・備考とともに、外観4面（正面・側面・背面等）の写真が高解像度で一覧表示されます。</span>
+            </figcaption>
+          </figure>
           <div class="data-table-wrap">
             <table class="data-table">
               <thead>
@@ -2238,18 +2197,22 @@
                 </defs>
 
                 <!-- ================= 1. GitHub Pages (Frontend) ================= -->
-                <rect x="15" y="15" width="250" height="375" rx="14" fill="#f8fafc" stroke="#0284c7" stroke-width="1.8" />
+                <rect x="15" y="15" width="250" height="375" rx="14" fill="#f8fafc" stroke="#0284c7"
+                  stroke-width="1.8" />
 
                 <!-- Badge -->
                 <rect x="30" y="28" width="115" height="26" rx="6" fill="#0284c7" />
-                <text x="87" y="45" class="wf-mono" font-weight="700" font-size="11" fill="#ffffff" text-anchor="middle">GitHub Pages</text>
+                <text x="87" y="45" class="wf-mono" font-weight="700" font-size="11" fill="#ffffff"
+                  text-anchor="middle">GitHub Pages</text>
                 <text x="155" y="45" font-weight="600" font-size="11" fill="#0369a1">フロントエンド</text>
 
                 <!-- Device Card -->
                 <g filter="url(#arch-shadow)">
-                  <rect x="30" y="68" width="220" height="236" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" />
+                  <rect x="30" y="68" width="220" height="236" rx="10" fill="#ffffff" stroke="#e2e8f0"
+                    stroke-width="1.2" />
                   <rect x="42" y="80" width="196" height="30" rx="6" fill="#e0f2fe" />
-                  <text x="140" y="100" font-weight="700" font-size="12" fill="#0369a1" text-anchor="middle">📱 現場スマートフォン</text>
+                  <text x="140" y="100" font-weight="700" font-size="12" fill="#0369a1" text-anchor="middle">📱
+                    現場スマートフォン</text>
 
                   <text x="44" y="132" font-weight="700" font-size="12" fill="#0f172a">【静的Webアプリケーション】</text>
 
@@ -2267,7 +2230,8 @@
                   <text x="60" y="260" font-size="9.5" fill="#64748b">（LocalStorageに一時退避）</text>
 
                   <rect x="42" y="274" width="196" height="20" rx="4" fill="#f1f5f9" />
-                  <text x="140" y="288" class="wf-mono" font-size="10" fill="#475569" text-anchor="middle">HTML5 / Vanilla JS / CSS</text>
+                  <text x="140" y="288" class="wf-mono" font-size="10" fill="#475569" text-anchor="middle">HTML5 /
+                    Vanilla JS / CSS</text>
                 </g>
 
                 <!-- Footer note -->
@@ -2279,22 +2243,27 @@
                 <!-- Connector 1 -> 2 -->
                 <path d="M 265 170 L 310 170" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arch-arrow-blue)" />
                 <rect x="254" y="138" width="68" height="22" rx="4" fill="#ffffff" stroke="#0284c7" stroke-width="1" />
-                <text x="288" y="153" class="wf-mono" font-size="9.5" font-weight="700" fill="#0284c7" text-anchor="middle">POST送信</text>
+                <text x="288" y="153" class="wf-mono" font-size="9.5" font-weight="700" fill="#0284c7"
+                  text-anchor="middle">POST送信</text>
 
 
                 <!-- ================= 2. Google Apps Script (Backend) ================= -->
-                <rect x="315" y="15" width="250" height="375" rx="14" fill="#fffdf2" stroke="#f59e0b" stroke-width="1.8" />
+                <rect x="315" y="15" width="250" height="375" rx="14" fill="#fffdf2" stroke="#f59e0b"
+                  stroke-width="1.8" />
 
                 <!-- Badge -->
                 <rect x="330" y="28" width="135" height="26" rx="6" fill="#d97706" />
-                <text x="397" y="45" class="wf-mono" font-weight="700" font-size="11" fill="#ffffff" text-anchor="middle">Google Apps Script</text>
+                <text x="397" y="45" class="wf-mono" font-weight="700" font-size="11" fill="#ffffff"
+                  text-anchor="middle">Google Apps Script</text>
                 <text x="475" y="45" font-weight="600" font-size="11" fill="#92400e">API / 配信</text>
 
                 <!-- Hub Card -->
                 <g filter="url(#arch-shadow)">
-                  <rect x="330" y="68" width="220" height="236" rx="10" fill="#ffffff" stroke="#fde68a" stroke-width="1.2" />
+                  <rect x="330" y="68" width="220" height="236" rx="10" fill="#ffffff" stroke="#fde68a"
+                    stroke-width="1.2" />
                   <rect x="342" y="80" width="196" height="30" rx="6" fill="#fef3c7" />
-                  <text x="440" y="100" font-weight="700" font-size="12" fill="#92400e" text-anchor="middle">⚙️ サーバーサイド処理 (GAS)</text>
+                  <text x="440" y="100" font-weight="700" font-size="12" fill="#92400e" text-anchor="middle">⚙️
+                    サーバーサイド処理 (GAS)</text>
 
                   <text x="344" y="132" font-weight="700" font-size="12" fill="#0f172a">【doPost 処理（撮影データ中継）】</text>
                   <circle cx="350" cy="155" r="3" fill="#d97706" />
@@ -2330,15 +2299,18 @@
 
 
                 <!-- ================= 3. Google Drive (Storage) ================= -->
-                <rect x="615" y="15" width="250" height="175" rx="14" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.8" />
+                <rect x="615" y="15" width="250" height="175" rx="14" fill="#f0fdf4" stroke="#16a34a"
+                  stroke-width="1.8" />
 
                 <!-- Badge -->
                 <rect x="630" y="28" width="105" height="26" rx="6" fill="#16a34a" />
-                <text x="682" y="45" font-weight="700" font-size="11" fill="#ffffff" text-anchor="middle">Google ドライブ</text>
+                <text x="682" y="45" font-weight="700" font-size="11" fill="#ffffff" text-anchor="middle">Google
+                  ドライブ</text>
                 <text x="748" y="45" font-weight="600" font-size="11" fill="#15803d">写真保管</text>
 
                 <g filter="url(#arch-shadow)">
-                  <rect x="630" y="66" width="220" height="110" rx="8" fill="#ffffff" stroke="#bbf7d0" stroke-width="1.2" />
+                  <rect x="630" y="66" width="220" height="110" rx="8" fill="#ffffff" stroke="#bbf7d0"
+                    stroke-width="1.2" />
                   <text x="642" y="88" font-weight="700" font-size="12" fill="#14532d">📁 写真ストレージ領域</text>
                   <circle cx="648" cy="110" r="3" fill="#16a34a" />
                   <text x="658" y="114" font-size="11" fill="#334155">外観4面写真ファイル（WebP）</text>
@@ -2350,15 +2322,18 @@
 
 
                 <!-- ================= 4. Google Sheets (Database) ================= -->
-                <rect x="615" y="205" width="250" height="185" rx="14" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.8" />
+                <rect x="615" y="205" width="250" height="185" rx="14" fill="#f0fdf4" stroke="#16a34a"
+                  stroke-width="1.8" />
 
                 <!-- Badge -->
                 <rect x="630" y="218" width="135" height="26" rx="6" fill="#16a34a" />
-                <text x="697" y="235" font-weight="700" font-size="11" fill="#ffffff" text-anchor="middle">Google スプレッドシート</text>
+                <text x="697" y="235" font-weight="700" font-size="11" fill="#ffffff" text-anchor="middle">Google
+                  スプレッドシート</text>
                 <text x="778" y="235" font-weight="600" font-size="11" fill="#15803d">台帳DB</text>
 
                 <g filter="url(#arch-shadow)">
-                  <rect x="630" y="254" width="220" height="122" rx="8" fill="#ffffff" stroke="#bbf7d0" stroke-width="1.2" />
+                  <rect x="630" y="254" width="220" height="122" rx="8" fill="#ffffff" stroke="#bbf7d0"
+                    stroke-width="1.2" />
                   <text x="642" y="276" font-weight="700" font-size="12" fill="#14532d">📊 スキャン台帳（scansシート）</text>
                   <circle cx="648" cy="298" r="3" fill="#16a34a" />
                   <text x="658" y="302" font-size="11" fill="#334155">登録日時 ＆ バーコード番号</text>
@@ -2373,9 +2348,15 @@
 
             <figcaption class="work-flow-caption">
               <div class="work-flow-legend">
-                <span class="workflow-tag" style="color: #0284c7;"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#0284c7;"></span> GitHub Pages：現場スマホ向け撮影Webアプリ（カメラ・スキャン）</span>
-                <span class="workflow-tag" style="color: #d97706;"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#f59e0b;"></span> GAS：認証・中継API ＆ PC閲覧画面配信</span>
-                <span class="workflow-tag" style="color: #16a34a;"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#16a34a;"></span> Google Workspace：ドライブ（写真保管）＋ スプレッドシート（台帳DB）</span>
+                <span class="workflow-tag" style="color: #0284c7;"><span
+                    style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#0284c7;"></span>
+                  GitHub Pages：現場スマホ向け撮影Webアプリ（カメラ・スキャン）</span>
+                <span class="workflow-tag" style="color: #d97706;"><span
+                    style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#f59e0b;"></span>
+                  GAS：認証・中継API ＆ PC閲覧画面配信</span>
+                <span class="workflow-tag" style="color: #16a34a;"><span
+                    style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#16a34a;"></span>
+                  Google Workspace：ドライブ（写真保管）＋ スプレッドシート（台帳DB）</span>
               </div>
             </figcaption>
           </figure>
@@ -2385,15 +2366,21 @@
               <h3>構成のポイント・連携の特徴</h3>
               <p>現場の即応性と運用の手軽さを両立するため、用途に応じた適材適所の技術選定を行っています。</p>
               <ul class="route-checklist">
-                <li><i data-lucide="check" aria-hidden="true"></i><span><strong>カメラ制限の回避（GitHub Pages）：</strong>ブラウザのセキュリティ仕様上、GASの埋め込み環境ではカメラ起動がブロックされるため、撮影画面のみ独立ドメイン（GitHub Pages）で動かしています。</span></li>
-                <li><i data-lucide="check" aria-hidden="true"></i><span><strong>サーバーレス・無料運用（GAS）：</strong>外部のWebサーバーやクラウドサービスを別途契約することなく、社内Googleアカウントの標準機能のみで安全に運用可能です。</span></li>
-                <li><i data-lucide="check" aria-hidden="true"></i><span><strong>テキストと大容量データの分離（Sheets ＋ Drive）：</strong>検索や一覧表示を高速化するため、メタデータはスプレッドシートへ、大容量の写真画像はGoogleドライブへと自動で分離保存されます。</span></li>
+                <li><i data-lucide="check" aria-hidden="true"></i><span><strong>カメラ制限の回避（GitHub
+                      Pages）：</strong>ブラウザのセキュリティ仕様上、GASの埋め込み環境ではカメラ起動がブロックされるため、撮影画面のみ独立ドメイン（GitHub
+                    Pages）で動かしています。</span></li>
+                <li><i data-lucide="check"
+                    aria-hidden="true"></i><span><strong>サーバーレス・無料運用（GAS）：</strong>外部のWebサーバーやクラウドサービスを別途契約することなく、社内Googleアカウントの標準機能のみで安全に運用可能です。</span>
+                </li>
+                <li><i data-lucide="check" aria-hidden="true"></i><span><strong>テキストと大容量データの分離（Sheets ＋
+                      Drive）：</strong>検索や一覧表示を高速化するため、メタデータはスプレッドシートへ、大容量の写真画像はGoogleドライブへと自動で分離保存されます。</span></li>
               </ul>
             </div>
             <div class="route-callout">
               <div>
                 <strong>データの安全管理について</strong>
-                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 0;">現場スマートフォンには個人アカウントを設定する必要がなく、撮影された写真やシリアル情報はすべて組織管理下のGoogleドライブ・スプレッドシートへ直接集約されます。</p>
+                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 0;">
+                  現場スマートフォンには個人アカウントを設定する必要がなく、撮影された写真やシリアル情報はすべて組織管理下のGoogleドライブ・スプレッドシートへ直接集約されます。</p>
               </div>
             </div>
           </div>
@@ -2406,7 +2393,7 @@
     <div class="container footer-inner">
       <div>
         <p>箱スキャン 操作マニュアル ｜ 現場での撮影はスマートフォン、履歴・写真の確認はPCからご利用いただけます。</p>
-        <a class="footer-back-link" href="../../index.html">
+        <a class="footer-back-link" href="../../../index.html">
           <i data-lucide="arrow-left" aria-hidden="true"></i>
           <span>社内業務マニュアル・資料集へ戻る</span>
         </a>
