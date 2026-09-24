@@ -55,6 +55,10 @@
       <div id="empty-message" hidden>
         <i data-lucide="inbox" class="empty-icon"></i>
         <p>登録データがありません</p>
+        <button id="btn-list-retry" class="secondary" hidden>
+          <i data-lucide="refresh-cw"></i>
+          <span>再読み込み</span>
+        </button>
       </div>
 
       <!-- ページネーション -->
@@ -127,6 +131,13 @@
 
     <!-- トースト通知 -->
     <div id="toast" hidden></div>
+
+    <div id="loading-overlay" class="loading-overlay" role="status" aria-live="polite" aria-atomic="true" hidden>
+      <div class="loading-panel">
+        <span class="loading-spinner" aria-hidden="true"></span>
+        <span id="loading-message">処理中…</span>
+      </div>
+    </div>
   </main>
 
   <?!= include('viewer_script'); ?>

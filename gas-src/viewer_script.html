@@ -15,6 +15,15 @@
     }
   }
 
+  function showLoading(message) {
+    $('loading-message').textContent = message;
+    $('loading-overlay').hidden = false;
+  }
+
+  function hideLoading() {
+    $('loading-overlay').hidden = true;
+  }
+
   window.addEventListener('load', () => {
     renderIcons();
     $('btn-login').addEventListener('click', login);
@@ -23,6 +32,7 @@
     });
     $('btn-prev').addEventListener('click', () => loadPage(state.currentPage - 1));
     $('btn-next').addEventListener('click', () => loadPage(state.currentPage + 1));
+    $('btn-list-retry').addEventListener('click', () => loadPage(state.currentPage));
     $('btn-back').addEventListener('click', showList);
     $('btn-lightbox-close').addEventListener('click', closeLightbox);
 
@@ -39,9 +49,11 @@
     if (!pw) return;
     $('btn-login').disabled = true;
     $('auth-error').hidden = true;
+    showLoading('ログインしています…');
 
     google.script.run
       .withSuccessHandler((res) => {
+        hideLoading();
         $('btn-login').disabled = false;
         if (res && res.ok) {
           state.password = pw;
@@ -55,6 +67,7 @@
         }
       })
       .withFailureHandler((err) => {
+        hideLoading();
         $('btn-login').disabled = false;
         $('auth-error').textContent = '通信エラー: ' + err.message;
         $('auth-error').hidden = false;
@@ -66,19 +79,48 @@
     if (page < 1) return;
     $('btn-prev').disabled = true;
     $('btn-next').disabled = true;
+    renderListSkeleton();
 
     google.script.run
       .withSuccessHandler((res) => {
         if (!res.ok) {
+          showListError();
+          updatePaginationButtons();
           showToast(res.error || '取得に失敗しました', 'error');
           return;
         }
         renderList(res);
       })
       .withFailureHandler((err) => {
+        showListError();
+        updatePaginationButtons();
         showToast('通信エラー: ' + err.message, 'error');
       })
       .listRecords(state.password, page);
+  }
+
+  function renderListSkeleton() {
+    const list = $('record-list');
+    list.hidden = false;
+    $('empty-message').hidden = true;
+    list.innerHTML = Array.from({ length: 5 }, () => `
+      <div class="record-skeleton" aria-hidden="true">
+        <span class="record-skeleton-bar barcode"></span>
+        <span class="record-skeleton-bar timestamp"></span>
+      </div>
+    `).join('');
+  }
+
+  function showListError() {
+    $('record-list').hidden = true;
+    $('empty-message').querySelector('p').textContent = '履歴を読み込めませんでした';
+    $('empty-message').hidden = false;
+    $('btn-list-retry').hidden = false;
+  }
+
+  function updatePaginationButtons() {
+    $('btn-prev').disabled = state.currentPage <= 1;
+    $('btn-next').disabled = state.currentPage >= state.totalPages;
   }
 
   function renderList(res) {
@@ -87,6 +129,8 @@
 
     const listEl = $('record-list');
     listEl.innerHTML = '';
+    $('empty-message').querySelector('p').textContent = '登録データがありません';
+    $('btn-list-retry').hidden = true;
 
     if (!res.results || res.results.length === 0) {
       listEl.hidden = true;
@@ -140,10 +184,11 @@
   }
 
   function showDetail(rowNumber) {
-    showToast('読み込み中…');
+    showLoading('登録データを読み込んでいます…');
     google.script.run
       .withSuccessHandler((res) => {
         if (!res.ok) {
+          hideLoading();
           showToast(res.error || '取得に失敗しました', 'error');
           return;
         }
@@ -151,8 +196,10 @@
         $('list-section').hidden = true;
         $('detail-section').hidden = false;
         renderIcons();
+        hideLoading();
       })
       .withFailureHandler((err) => {
+        hideLoading();
         showToast('通信エラー: ' + err.message, 'error');
       })
       .getRecordByRow(state.password, rowNumber);
@@ -200,6 +247,11 @@
       grid.appendChild(fig);
 
       loadImage(img.fileId, (dataUrl) => {
+        if (!dataUrl) {
+          skeletonEl.classList.add('failed');
+          skeletonEl.textContent = '画像を読み込めません';
+          return;
+        }
         imgEl.src = dataUrl;
         imgEl.addEventListener('load', () => {
           imgEl.classList.add('loaded');
@@ -219,9 +271,12 @@
       .withSuccessHandler((res) => {
         if (res.ok) {
           cb(`data:${res.mimeType};base64,${res.base64}`);
+        } else {
+          cb(null);
         }
       })
       .withFailureHandler((err) => {
+        cb(null);
         showToast('画像取得失敗: ' + err.message, 'error');
       })
       .getImage(state.password, fileId);

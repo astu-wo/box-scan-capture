@@ -116,15 +116,26 @@ function callGas(action, params) {
   });
 }
 
+function showLoading(message) {
+  $('loading-message').textContent = message;
+  $('loading-overlay').hidden = false;
+}
+
+function hideLoading() {
+  $('loading-overlay').hidden = true;
+}
+
 // --- ログイン ---
 function login() {
   const pw = $('password-input').value;
   if (!pw) return;
   $('btn-login').disabled = true;
   $('auth-error').hidden = true;
+  showLoading('ログインしています…');
 
   callGas('verifyPassword', { password: pw })
     .then((res) => {
+      hideLoading();
       $('btn-login').disabled = false;
       if (res && res.ok) {
         state.password = pw;
@@ -136,6 +147,7 @@ function login() {
       }
     })
     .catch((err) => {
+      hideLoading();
       $('btn-login').disabled = false;
       $('auth-error').textContent = '通信エラー: ' + err.message;
       $('auth-error').hidden = false;
@@ -174,9 +186,16 @@ async function initApp() {
 
   startScanner(); // await しない
 
-  const drafts = await getAllDrafts();
-  if (drafts.length > 0) {
-    showToast(`下書きが${drafts.length}件あります`, '');
+  showLoading('下書きを確認しています…');
+  try {
+    const drafts = await getAllDrafts();
+    if (drafts.length > 0) {
+      showToast(`下書きが${drafts.length}件あります`, '');
+    }
+  } catch (err) {
+    showToast('下書きを確認できませんでした: ' + err.message, 'error');
+  } finally {
+    hideLoading();
   }
 }
 
@@ -475,18 +494,18 @@ function retake() {
 async function upload() {
   $('btn-upload').disabled = true;
   $('btn-retake').disabled = true;
-  showToast('アップロード中…');
-
-  const params = {
-    password: state.password,
-    barcode: state.barcode,
-    note: $('note-input').value || '',
-  };
-  state.photos.forEach((p, i) => {
-    params['img' + i] = dataUrlToBase64(p.dataUrl);
-  });
+  showLoading('写真をアップロードしています…');
 
   try {
+    const params = {
+      password: state.password,
+      barcode: state.barcode,
+      note: $('note-input').value || '',
+    };
+    state.photos.forEach((p, i) => {
+      params['img' + i] = dataUrlToBase64(p.dataUrl);
+    });
+
     const res = await callGas('saveScan', params);
     if (res.ok) {
       showToast('アップロード完了', 'success');
@@ -502,6 +521,7 @@ async function upload() {
       images: state.photos.map((p) => ({ base64: dataUrlToBase64(p.dataUrl) })),
     });
   } finally {
+    hideLoading();
     $('btn-upload').disabled = false;
     $('btn-retake').disabled = false;
   }
@@ -557,7 +577,16 @@ async function deleteDraft(id) {
 
 async function showDrafts() {
   showSection('drafts-section');
-  const drafts = await getAllDrafts();
+  showLoading('下書きを読み込んでいます…');
+  let drafts;
+  try {
+    drafts = await getAllDrafts();
+  } catch (err) {
+    showToast('下書きを読み込めませんでした: ' + err.message, 'error');
+    return;
+  } finally {
+    hideLoading();
+  }
   const list = $('drafts-list');
   list.innerHTML = '';
   if (drafts.length === 0) {
@@ -581,6 +610,7 @@ async function showDrafts() {
     resendBtn.innerHTML = '<i data-lucide="send"></i><span>再送信</span>';
     resendBtn.addEventListener('click', async () => {
       resendBtn.disabled = true;
+      showLoading('下書きを再送信しています…');
       try {
         const params = {
           password: state.password,
@@ -601,6 +631,8 @@ async function showDrafts() {
       } catch (e) {
         showToast('再送信失敗: ' + e.message, 'error');
         resendBtn.disabled = false;
+      } finally {
+        hideLoading();
       }
     });
 
