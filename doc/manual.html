@@ -1529,7 +1529,7 @@
             </a>
           </div>
           <div class="hero-meta" aria-label="利用環境と条件">
-            <span><i data-lucide="smartphone" aria-hidden="true"></i>スマホで現場撮影</span>
+            <span><i data-lucide="smartphone" aria-hidden="true"></i>スマホで撮影</span>
             <span><i data-lucide="monitor" aria-hidden="true"></i>PCで履歴・写真確認</span>
             <span><i data-lucide="key-round" aria-hidden="true"></i>共通パスワード認証</span>
           </div>
@@ -1543,7 +1543,7 @@
           <ol class="flow-list">
             <li class="flow-item">
               <span class="flow-number">01</span>
-              <span class="flow-copy"><strong>ログイン</strong><span>共通パスワードを入力</span></span>
+              <span class="flow-copy"><strong>ログイン</strong><span>パスワードを入力</span></span>
               <span class="flow-icon"><i data-lucide="key-round" aria-hidden="true"></i></span>
             </li>
             <li class="flow-item">
@@ -1719,7 +1719,7 @@
                   <rect x="338" y="252" width="204" height="60" rx="7" fill="#fefce8" stroke="#fef08a"
                     stroke-width="1" />
                   <text x="350" y="272" font-weight="700" font-size="11.5" fill="#854d0e">② 外観4面の写真撮影</text>
-                  <text x="350" y="291" font-weight="500" font-size="10" fill="#a16207">天面 → 正面 → 左側面 → 右側面</text>
+                  <text x="350" y="291" font-weight="500" font-size="10" fill="#a16207">正面 → 右側面 → 背面 → 左側面</text>
                   <text x="350" y="304" font-weight="500" font-size="9.5" fill="#b45309">（ガイド枠に合わせてシャッター）</text>
                 </g>
 
@@ -1827,7 +1827,7 @@
               </div>
               <div class="route-callout">
                 <div><strong>撮影画面</strong><span>本マニュアルと同じサイトの <span class="inline-code">index.html</span>
-                    が撮影画面です。現場のスマートフォンから開いてください。</span></div>
+                    が撮影画面です。スマートフォンから開いてください。</span></div>
                 <a class="text-link" href="../index.html">撮影画面を開く <i data-lucide="arrow-up-right"
                     aria-hidden="true"></i></a>
               </div>
@@ -1849,7 +1849,7 @@
                 </ul>
               </div>
               <div class="route-callout">
-                <div><strong>閲覧画面</strong><span>共通パスワードでログイン後、「スキャン履歴」画面が表示されます。</span></div>
+                <div><strong>閲覧画面</strong><span>パスワードでログイン後、「スキャン履歴」画面が表示されます。</span></div>
                 <a class="text-link"
                   href="https://script.google.com/macros/s/AKfycbwYffcivGulP2xIHiD-XuaZOVTvfoc_p3gTTQxRFH3M8gFHk2wRfrTMfgSN4TB12aoD/exec?page=viewer"
                   target="_blank" rel="noreferrer">閲覧画面を開く <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
@@ -1880,7 +1880,7 @@
             <div class="preflight-item">
               <span class="preflight-icon"><i data-lucide="wifi" aria-hidden="true"></i></span>
               <h3>通信環境</h3>
-              <p>写真の撮影自体はオフラインでも可能ですが、サーバーへのデータ送信（アップロード）や履歴の閲覧にはインターネット接続が必要です。</p>
+              <p>ログインにはインターネット接続が必要です。ログイン後は通信が途切れても撮影できますが、下書きに残すには「アップロード」を押して送信に失敗する必要があります。</p>
             </div>
           </div>
         </section>
@@ -1899,13 +1899,13 @@
               <span class="step-number">01</span>
               <div class="step-content">
                 <div class="step-main">
-                  <h3>共通パスワードでログイン</h3>
-                  <p>撮影用URLを開き、現場共通のパスワードを入力して「ログイン」をタップします。認証に成功するとスキャン画面へ切り替わります。</p>
+                  <h3>パスワードでログイン</h3>
+                  <p>撮影用URLを開き、パスワードを入力して「ログイン」をタップします。認証に成功するとスキャン画面へ切り替わります。</p>
                   <ul class="step-detail">
                     <li><i data-lucide="key-round"
                         aria-hidden="true"></i><span>ページを再読み込み（リロード）した場合は、再度パスワードの入力が必要です。</span></li>
                     <li><i data-lucide="shield-check"
-                        aria-hidden="true"></i><span>個別のユーザー登録は不要です。現場共通で取り決めたパスワードをご使用ください。</span></li>
+                        aria-hidden="true"></i><span>個別のユーザー登録は不要です。</span></li>
                   </ul>
                 </div>
                 <div class="step-visual">
@@ -1930,6 +1930,8 @@
                         aria-hidden="true"></i><span>照明の反射や影で認識しづらい場合は、箱の角度や端末との距離を少し変えてみてください。</span></li>
                     <li><i data-lucide="badge-check"
                         aria-hidden="true"></i><span>「シリアル番号と一致しますか？」の画面で、箱の印字と読み取り値を目視で照合します。</span></li>
+                    <li><i data-lucide="triangle-alert"
+                      aria-hidden="true"></i><span>「C」で始まる13文字でない場合は警告表示になりますが、撮影へ進めます。箱の印字と一致するか必ず確認してください。</span></li>
                     <li><i data-lucide="rotate-ccw"
                         aria-hidden="true"></i><span>認識内容が異なる場合は、「やり直す」をタップして再度スキャンします。</span>
                     </li>
@@ -1997,7 +1999,7 @@
             <div class="section-index">DRAFTS</div>
             <div>
               <h2 id="drafts-title">通信エラー時は「下書き」から再送信</h2>
-              <p class="section-description">電波の途切れや通信タイムアウトが発生しても、撮影したデータはその場でスマートフォンの端末内に自動保存されます。</p>
+              <p class="section-description">撮影しただけでは下書きに保存されません。「アップロード」が失敗すると、撮影データをスマートフォン内に保存します。</p>
             </div>
           </div>
           <div class="draft-layout">
@@ -2025,7 +2027,7 @@
           <div class="notice">
             <i data-lucide="wifi-off" aria-hidden="true"></i>
             <p><strong>電波が復旧した後の対応:</strong>
-              撮影時と同じ端末・ブラウザで撮影画面にログインし、「下書き一覧」から再送信を行ってください。何度試しても送信できない場合は、画面に表示されるエラー内容を控えて管理担当者へご連絡ください。</p>
+              撮影時と同じ端末・ブラウザで撮影画面にログインし、「下書き一覧」から再送信を行ってください。タイムアウトの場合は登録済みのことがあるため、再送信の前にPCの履歴を確認してください。何度試しても送信できない場合は、画面に表示されるエラー内容を控えて管理担当者へご連絡ください。</p>
           </div>
         </section>
 
@@ -2041,7 +2043,7 @@
             <div class="viewer-step">
               <small>01 / LOGIN</small>
               <h3>ログイン</h3>
-              <p>PCのブラウザで閲覧用URLを開き、共通パスワードを入力します。</p>
+              <p>PCのブラウザで閲覧用URLを開き、パスワードを入力します。</p>
             </div>
             <div class="viewer-step">
               <small>02 / LIST</small>
@@ -2150,13 +2152,13 @@
             <div class="section-index">OPERATIONS</div>
             <div>
               <h2 id="operations-title">運用上の注意</h2>
-              <p class="section-description">現場でのスムーズな利用のため共通パスワードを採用しています。セキュリティ維持のため、以下のルールを守って運用してください。</p>
+              <p class="section-description">スムーズな利用のためパスワードは撮影画面、閲覧画面の両方で共通のものを採用しています。セキュリティ維持のため、以下のルールを守って運用してください。</p>
             </div>
           </div>
           <div class="operations-note">
             <div>
-              <strong>共通パスワードの管理</strong>
-              <p>撮影画面・閲覧画面で共通のパスワードです。関係者以外への口外や、付箋・メモ等を第三者の目に触れる場所に貼ることは避けてください。</p>
+              <strong>パスワードの管理</strong>
+              <p>関係者以外への口外や、付箋・メモ等を第三者の目に触れる場所に貼ることは避けてください。</p>
             </div>
             <div>
               <strong>登録される情報</strong>
@@ -2219,15 +2221,15 @@
                   <!-- Feature list -->
                   <circle cx="50" cy="155" r="3" fill="#0284c7" />
                   <text x="60" y="159" font-size="11" fill="#334155">カメラ起動・バーコードスキャン</text>
-                  <text x="60" y="174" font-size="9.5" fill="#64748b">（ZXingライブラリで高速認識）</text>
+                  <text x="60" y="174" font-size="9.5" fill="#64748b">（ブラウザ標準のBarcodeDetectorを使用）</text>
 
                   <circle cx="50" cy="198" r="3" fill="#0284c7" />
-                  <text x="60" y="202" font-size="11" fill="#334155">外観4面写真の撮影 ＆ 圧縮</text>
-                  <text x="60" y="217" font-size="9.5" fill="#64748b">（WebP形式へ高画質軽量化）</text>
+                  <text x="60" y="202" font-size="11" fill="#334155">外観4面の撮影・WebP変換</text>
+                  <text x="60" y="217" font-size="9.5" fill="#64748b">（長辺最大2560px・品質92%）</text>
 
                   <circle cx="50" cy="241" r="3" fill="#0284c7" />
-                  <text x="60" y="245" font-size="11" fill="#334155">オフライン下書き保存</text>
-                  <text x="60" y="260" font-size="9.5" fill="#64748b">（LocalStorageに一時退避）</text>
+                  <text x="60" y="245" font-size="11" fill="#334155">下書き保存（IndexedDB）</text>
+                  <text x="60" y="260" font-size="9.5" fill="#64748b">（送信に失敗したときに保存）</text>
 
                   <rect x="42" y="274" width="196" height="20" rx="4" fill="#f1f5f9" />
                   <text x="140" y="288" class="wf-mono" font-size="10" fill="#475569" text-anchor="middle">HTML5 /
@@ -2242,14 +2244,14 @@
 
                 <!-- Connector 1 -> 2 -->
                 <path d="M 265 170 L 310 170" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arch-arrow-blue)" />
-                <rect x="254" y="138" width="68" height="22" rx="4" fill="#ffffff" stroke="#0284c7" stroke-width="1" />
-                <text x="288" y="153" class="wf-mono" font-size="9.5" font-weight="700" fill="#0284c7"
-                  text-anchor="middle">POST送信</text>
 
 
                 <!-- ================= 2. Google Apps Script (Backend) ================= -->
                 <rect x="315" y="15" width="250" height="375" rx="14" fill="#fffdf2" stroke="#f59e0b"
                   stroke-width="1.8" />
+                <rect x="254" y="138" width="68" height="22" rx="4" fill="#ffffff" stroke="#0284c7" stroke-width="1" />
+                <text x="288" y="153" class="wf-mono" font-size="9.5" font-weight="700" fill="#0284c7"
+                  text-anchor="middle">POST送信</text>
 
                 <!-- Badge -->
                 <rect x="330" y="28" width="135" height="26" rx="6" fill="#d97706" />
@@ -2285,17 +2287,16 @@
                 <rect x="330" y="316" width="220" height="60" rx="8" fill="#fefce8" stroke="#fef08a" stroke-width="1" />
                 <text x="340" y="336" font-weight="700" font-size="11" fill="#854d0e">💡 採用理由</text>
                 <text x="340" y="352" font-size="10" fill="#713f12">専用サーバー契約不要・無料運用可能</text>
-                <text x="340" y="366" font-size="10" fill="#713f12">社内Googleアカウント内で完結し安全</text>
 
                 <!-- Connector 2 -> Drive -->
                 <path d="M 550 120 L 610 95" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arch-arrow-green)" />
-                <rect x="548" y="85" width="62" height="20" rx="4" fill="#ffffff" stroke="#16a34a" stroke-width="1" />
-                <text x="579" y="99" font-size="9" font-weight="700" fill="#166534" text-anchor="middle">写真保存</text>
+                <rect x="548" y="70" width="62" height="20" rx="4" fill="#ffffff" stroke="#16a34a" stroke-width="1" />
+                <text x="579" y="84" font-size="9" font-weight="700" fill="#166534" text-anchor="middle">写真保存</text>
 
                 <!-- Connector 2 -> Sheets -->
                 <path d="M 550 260 L 610 275" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arch-arrow-green)" />
-                <rect x="548" y="278" width="62" height="20" rx="4" fill="#ffffff" stroke="#16a34a" stroke-width="1" />
-                <text x="579" y="292" font-size="9" font-weight="700" fill="#166534" text-anchor="middle">台帳追記</text>
+                <rect x="548" y="283" width="62" height="20" rx="4" fill="#ffffff" stroke="#16a34a" stroke-width="1" />
+                <text x="579" y="297" font-size="9" font-weight="700" fill="#166534" text-anchor="middle">台帳追記</text>
 
 
                 <!-- ================= 3. Google Drive (Storage) ================= -->
@@ -2317,7 +2318,7 @@
                   <circle cx="648" cy="132" r="3" fill="#16a34a" />
                   <text x="658" y="136" font-size="11" fill="#334155">日付・シリアルで自動整理</text>
                   <circle cx="648" cy="154" r="3" fill="#16a34a" />
-                  <text x="658" y="158" font-size="11" fill="#334155">閲覧用ダウンロードURL発行</text>
+                  <text x="658" y="158" font-size="11" fill="#334155">閲覧画面から認証後に取得</text>
                 </g>
 
 
