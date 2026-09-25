@@ -471,6 +471,10 @@ function goReview() {
   showSection('review-section');
   $('review-barcode').textContent = state.barcode;
   $('note-input').value = '';
+  renderReviewPhotos();
+}
+
+function renderReviewPhotos() {
   const box = $('review-thumbs');
   box.innerHTML = '';
   state.photos.forEach((p, i) => {
@@ -479,9 +483,60 @@ function goReview() {
     img.src = p.dataUrl;
     const cap = document.createElement('figcaption');
     cap.textContent = FACE_LABELS[i];
+    const actions = document.createElement('div');
+    actions.className = 'photo-review-actions';
+    const rotateButton = document.createElement('button');
+    rotateButton.type = 'button';
+    rotateButton.className = 'secondary rotate-photo';
+    rotateButton.setAttribute('aria-label', `${FACE_LABELS[i]}を右に90度回転`);
+    rotateButton.title = '右に90度回転';
+    rotateButton.innerHTML = '<i data-lucide="rotate-cw"></i>';
+    rotateButton.addEventListener('click', async () => {
+      setReviewBusy(true);
+      try {
+        await rotatePhoto(i);
+      } catch (err) {
+        showToast('回転に失敗しました: ' + err.message, 'error');
+      } finally {
+        setReviewBusy(false);
+      }
+    });
+    actions.appendChild(rotateButton);
     fig.appendChild(img);
     fig.appendChild(cap);
+    fig.appendChild(actions);
     box.appendChild(fig);
+  });
+  renderIcons();
+}
+
+async function rotatePhoto(index) {
+  const photo = state.photos[index];
+  const image = new Image();
+  image.src = photo.dataUrl;
+  await image.decode();
+
+  const canvas = document.createElement('canvas');
+  canvas.width = image.naturalHeight;
+  canvas.height = image.naturalWidth;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('画像を処理できません');
+
+  ctx.translate(canvas.width / 2, canvas.height / 2);
+  ctx.rotate(Math.PI / 2);
+  ctx.drawImage(image, -image.naturalWidth / 2, -image.naturalHeight / 2);
+
+  const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/webp', IMAGE_QUALITY));
+  if (!blob) throw new Error('画像を書き出せません');
+  state.photos[index] = { blob, dataUrl: await blobToDataUrl(blob) };
+  renderReviewPhotos();
+}
+
+function setReviewBusy(isBusy) {
+  $('btn-upload').disabled = isBusy;
+  $('btn-retake').disabled = isBusy;
+  document.querySelectorAll('#review-thumbs button').forEach((button) => {
+    button.disabled = isBusy;
   });
 }
 
