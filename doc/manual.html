@@ -829,9 +829,23 @@
 
     .step-item.has-visual .step-content {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 220px;
-      gap: 28px;
-      align-items: start;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      grid-template-areas:
+        "title ."
+        "main visual";
+      gap: 0 28px;
+    }
+
+    .step-item.has-visual .step-content > h3 {
+      grid-area: title;
+    }
+
+    .step-item.has-visual .step-main {
+      grid-area: main;
+    }
+
+    .step-item.has-visual .step-visual {
+      grid-area: visual;
     }
 
     .step-main {
@@ -847,7 +861,7 @@
     .step-screenshot {
       margin: 0;
       width: 100%;
-      max-width: 220px;
+      max-width: 320px;
       border: 1px solid #D8E1EA;
       border-radius: 14px;
       overflow: hidden;
@@ -896,6 +910,37 @@
       height: 16px;
       margin-top: 4px;
       color: var(--primary);
+    }
+
+    .rotation-comparison {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .rotation-comparison figure {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-panel);
+      background: var(--surface);
+    }
+
+    .rotation-comparison img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .rotation-comparison figcaption {
+      padding: 8px 12px;
+      border-top: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
     }
 
     .inline-code {
@@ -1378,10 +1423,18 @@
         gap: 20px;
       }
 
+      .step-item.has-visual .step-content {
+        grid-template-areas:
+          "title"
+          "main"
+          "visual";
+        gap: 12px 0;
+      }
+
       .step-visual {
-        width: 100%;
-        max-width: 240px;
-        margin: 4px auto 0;
+        width: calc(100% + 54px);
+        max-width: 360px;
+        margin: 4px 0 0 -54px;
       }
 
       .step-number {
@@ -1396,6 +1449,12 @@
 
       .step-detail {
         grid-template-columns: 1fr;
+      }
+
+      .rotation-comparison {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+        margin: 24px auto 0;
       }
 
       .footer-inner {
@@ -1898,8 +1957,8 @@
             <li class="step-item has-visual">
               <span class="step-number">01</span>
               <div class="step-content">
+                <h3>パスワードでログイン</h3>
                 <div class="step-main">
-                  <h3>パスワードでログイン</h3>
                   <p>撮影用URLを開き、パスワードを入力して「ログイン」をタップします。認証に成功するとスキャン画面へ切り替わります。</p>
                   <ul class="step-detail">
                     <li><i data-lucide="key-round"
@@ -1920,8 +1979,8 @@
             <li class="step-item has-visual">
               <span class="step-number">02</span>
               <div class="step-content">
+                <h3>バーコードを読み取る</h3>
                 <div class="step-main">
-                  <h3>バーコードを読み取る</h3>
                   <p>「読取待ち…」の画面で、箱のバーコード（Code 39形式）を画面中央の枠内に合わせます。認識されると読み取り結果が表示され、確認ダイアログが開きます。</p>
                   <ul class="step-detail">
                     <li><i data-lucide="scan-line"
@@ -1948,9 +2007,9 @@
             <li class="step-item has-visual">
               <span class="step-number">03</span>
               <div class="step-content">
+                <h3>箱の4面を順番に撮影</h3>
                 <div class="step-main">
-                  <h3>箱の4面を順番に撮影</h3>
-                  <p>ダイアログの「撮影へ」をタップするとカメラ画面に移動します。画面上部のガイド表示を確認しながら、1面ずつ順番に撮影していきます。</p>
+                  <p>ダイアログの「撮影へ」をタップするとカメラ画面に移動します。箱を最大幅で撮影するためにスマホは横にして撮影します。画面上部のガイド表示を確認しながら、1面ずつ順番に撮影していきます。</p>
                   <ul class="step-detail">
                     <li><i data-lucide="focus" aria-hidden="true"></i><span>プレビュー画面をタップすると、その位置にピントを合わせ直すことができます。</span>
                     </li>
@@ -1962,7 +2021,7 @@
                 </div>
                 <div class="step-visual">
                   <figure class="step-screenshot">
-                    <img src="images/step-03-capture.webp" alt="1/4撮影開始時" width="1080" height="2400" loading="lazy">
+                    <img src="images/step-03-capture.webp" alt="1/4撮影開始時" width="864" height="1939" loading="lazy">
                     <figcaption>1/4撮影開始時</figcaption>
                   </figure>
                 </div>
@@ -1984,6 +2043,16 @@
                     <li><i data-lucide="check-circle-2"
                         aria-hidden="true"></i><span>送信が成功すると「アップロード完了」と表示され、次の箱のスキャン画面に戻ります。</span></li>
                   </ul>
+                </div>
+                <div class="rotation-comparison" aria-label="写真の回転前と回転後の比較">
+                  <figure>
+                    <img src="images/step-04-1.webp" alt="4枚の撮影写真が回転前の向きで表示された確認画面" loading="lazy" decoding="async">
+                    <figcaption>回転前</figcaption>
+                  </figure>
+                  <figure>
+                    <img src="images/step-04-2.webp" alt="4枚の撮影写真の向きを整えた後の確認画面" loading="lazy" decoding="async">
+                    <figcaption>回転後</figcaption>
+                  </figure>
                 </div>
               </div>
             </li>
