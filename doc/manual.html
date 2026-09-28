@@ -239,23 +239,44 @@
       position: relative;
       overflow: hidden;
       border-bottom: 1px solid var(--border);
-      background: var(--surface);
+      background: linear-gradient(112deg, #F5FBFC 0%, #FFFFFF 56%, #FFFDF4 100%);
     }
 
     .hero::before {
       position: absolute;
+      z-index: 0;
       inset: 0;
-      background-image: radial-gradient(#DCDCE5 1px, transparent 1px);
+      background-image:
+        radial-gradient(#D5E0E2 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 118, 110, 0.035) 1px, transparent 1px),
+        linear-gradient(rgba(15, 118, 110, 0.035) 1px, transparent 1px);
       background-position: 0 0;
-      background-size: 22px 22px;
+      background-size: 22px 22px, 72px 72px, 72px 72px;
       content: "";
-      opacity: 0.7;
+      opacity: 0.62;
       pointer-events: none;
       mask-image: linear-gradient(to right, black, transparent 78%);
     }
 
+    .hero::after {
+      position: absolute;
+      z-index: 0;
+      bottom: 18px;
+      left: max(24px, calc((100% - var(--content-width)) / 2));
+      width: 176px;
+      height: 32px;
+      background-image:
+        linear-gradient(180deg, transparent 47%, rgba(239, 68, 68, 0.55) 49%, rgba(239, 68, 68, 0.55) 51%, transparent 53%),
+        repeating-linear-gradient(90deg, #0F766E 0 2px, transparent 2px 5px, #0F766E 5px 6px, transparent 6px 10px);
+      content: "";
+      opacity: 0.2;
+      pointer-events: none;
+      mask-image: linear-gradient(to right, black, transparent 92%);
+    }
+
     .hero-inner {
       position: relative;
+      z-index: 1;
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(360px, 0.78fr);
       gap: 72px;
@@ -320,62 +341,6 @@
       margin-bottom: 30px;
       color: var(--text-secondary);
       font-size: 17px;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 30px;
-    }
-
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 42px;
-      padding: 10px 16px;
-      border: 1px solid transparent;
-      border-radius: var(--radius-control);
-      font-family: var(--font-body);
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 1.2;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
-    }
-
-    .button:hover {
-      transform: translateY(-1px);
-    }
-
-    .button svg {
-      width: 17px;
-      height: 17px;
-    }
-
-    .button-primary {
-      background: var(--primary);
-      color: var(--surface);
-    }
-
-    .button-primary:hover {
-      background: var(--primary-hover);
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
-    }
-
-    .button-secondary {
-      border-color: var(--border);
-      background: var(--surface);
-      color: var(--text-primary);
-    }
-
-    .button-secondary:hover {
-      border-color: var(--primary);
-      color: var(--primary-hover);
     }
 
     .hero-meta {
@@ -717,6 +682,29 @@
     .route-callout span {
       color: var(--text-secondary);
       font-size: 13px;
+    }
+
+    .capture-qr {
+      display: grid;
+      justify-items: start;
+      gap: 8px;
+      margin: 0;
+    }
+
+    .capture-qr img {
+      display: block;
+      width: 156px;
+      height: 156px;
+      padding: 6px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-control);
+      background: var(--surface);
+      image-rendering: pixelated;
+    }
+
+    .capture-qr figcaption {
+      color: var(--text-secondary);
+      font-size: 12px;
     }
 
     .text-link {
@@ -1350,6 +1338,13 @@
         padding: 48px 0 54px;
       }
 
+      .hero::after {
+        bottom: 14px;
+        left: 16px;
+        width: 132px;
+        height: 24px;
+      }
+
       .manual-shell {
         padding: 38px 0 68px;
       }
@@ -1466,7 +1461,6 @@
     @media print {
 
       .site-header,
-      .hero-actions,
       .mode-switch,
       .header-actions {
         display: none !important;
@@ -1574,19 +1568,6 @@
           <h1 id="page-title"><span class="hero-title-line">バーコードをスキャン、</span><br><span
               class="hero-title-line">PCで証拠写真を確認。</span></h1>
           <p class="hero-lede">バーコードを読み取り、箱の外観を撮影・登録するツールです。写真撮影はスマートフォン、撮影した写真の確認・保存はPCから行えます。</p>
-          <div class="hero-actions">
-            <a class="button button-primary" target="_blank" rel="noreferrer"
-              href="https://astu-wo.github.io/box-scan-capture/">
-              <i data-lucide="camera" aria-hidden="true"></i>
-              <span>撮影画面を開く</span>
-            </a>
-            <a class="button button-secondary" target="_blank" rel="noreferrer"
-              href="https://script.google.com/macros/s/AKfycbwYffcivGulP2xIHiD-XuaZOVTvfoc_p3gTTQxRFH3M8gFHk2wRfrTMfgSN4TB12aoD/exec?page=viewer"
-              target="_blank" rel="noreferrer">
-              <i data-lucide="monitor" aria-hidden="true"></i>
-              <span>閲覧画面を開く</span>
-            </a>
-          </div>
           <div class="hero-meta" aria-label="利用環境と条件">
             <span><i data-lucide="smartphone" aria-hidden="true"></i>スマホで撮影</span>
             <span><i data-lucide="monitor" aria-hidden="true"></i>PCで履歴・写真確認</span>
@@ -1887,6 +1868,11 @@
               <div class="route-callout">
                 <div><strong>撮影画面</strong><span>本マニュアルと同じサイトの <span class="inline-code">index.html</span>
                     が撮影画面です。スマートフォンから開いてください。</span></div>
+                <figure class="capture-qr">
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&amp;margin=8&amp;data=https%3A%2F%2Fastu-wo.github.io%2Fbox-scan-capture%2F"
+                    alt="スマートフォン撮影画面を開くQRコード" width="156" height="156" loading="lazy">
+                  <figcaption>スマートフォンで読み取ってください</figcaption>
+                </figure>
                 <a class="text-link" href="../index.html">撮影画面を開く <i data-lucide="arrow-up-right"
                     aria-hidden="true"></i></a>
               </div>
