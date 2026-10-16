@@ -22,6 +22,7 @@ const STORE_NAME = 'drafts';
 const GAS_TIMEOUT_MS = 30000;
 const EXPECTED_BARCODE_LENGTH = 13;
 const EXPECTED_BARCODE_PREFIX = 'C';
+const AUTO_ROTATE_QUARTER_TURNS = 3;
 
 const state = {
   password: null,
@@ -324,8 +325,8 @@ async function takePhoto() {
 
   try {
     const video = $('cam');
-    const { blob, dataUrl } = await captureAndEncode(video);
-    state.photos.push({ blob, dataUrl });
+    const { source, blob, dataUrl } = await captureAndEncode(video);
+    state.photos.push({ source, blob, dataUrl });
 
     const img = document.createElement('img');
     img.src = dataUrl;
@@ -334,7 +335,7 @@ async function takePhoto() {
     if (navigator.vibrate) navigator.vibrate(50);
 
     if (state.photos.length >= MAX_PHOTOS) {
-      goReview();
+      await goReview();
     }
   } catch (err) {
     showToast('撮影エラー: ' + err.message, 'error');
@@ -403,7 +404,7 @@ async function captureAndEncode(video) {
     canvas.toBlob(res, 'image/webp', IMAGE_QUALITY)
   );
   const dataUrl = await blobToDataUrl(blob);
-  return { blob, dataUrl };
+  return { source: canvas, blob, dataUrl };
 }
 
 // --- タップでピント合わせ (フォーカスリング表示 & AF再トリガー) ---
@@ -465,12 +466,24 @@ function dataUrlToBase64(dataUrl) {
 }
 
 // --- 確認 ---
-function goReview() {
+async function goReview() {
   stopStream(state.camStream);
   state.camStream = null;
   showSection('review-section');
   $('review-barcode').textContent = state.barcode;
   $('note-input').value = '';
+  setReviewBusy(true);
+  showLoading('写真を回転しています…');
+  try {
+    for (let i = 0; i < state.photos.length; i++) {
+      await rotatePhotoBy(i, AUTO_ROTATE_QUARTER_TURNS);
+    }
+  } catch (err) {
+    showToast('回転に失敗しました: ' + err.message, 'error');
+  } finally {
+    hideLoading();
+    setReviewBusy(false);
+  }
   renderReviewPhotos();
 }
 
@@ -510,25 +523,36 @@ function renderReviewPhotos() {
   renderIcons();
 }
 
-async function rotatePhoto(index) {
-  const photo = state.photos[index];
-  const image = new Image();
-  image.src = photo.dataUrl;
-  await image.decode();
-
+async function rotatePhotoBy(index, quarterTurns) {
+  const turns = ((quarterTurns % 4) + 4) % 4;
+  if (turns === 0) return;
+  const src = state.photos[index].source;
+  const w = src.width;
+  const h = src.height;
+  const isSwapped = turns % 2 === 1;
   const canvas = document.createElement('canvas');
-  canvas.width = image.naturalHeight;
-  canvas.height = image.naturalWidth;
+  canvas.width = isSwapped ? h : w;
+  canvas.height = isSwapped ? w : h;
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('画像を処理できません');
 
-  ctx.translate(canvas.width / 2, canvas.height / 2);
-  ctx.rotate(Math.PI / 2);
-  ctx.drawImage(image, -image.naturalWidth / 2, -image.naturalHeight / 2);
+  // 整数の変換行列を使い、補間による画素のぼけを避ける
+  const matrices = [
+    null,
+    [0, 1, -1, 0, h, 0],
+    [-1, 0, 0, -1, w, h],
+    [0, -1, 1, 0, 0, w],
+  ];
+  ctx.setTransform(...matrices[turns]);
+  ctx.drawImage(src, 0, 0);
 
   const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/webp', IMAGE_QUALITY));
   if (!blob) throw new Error('画像を書き出せません');
-  state.photos[index] = { blob, dataUrl: await blobToDataUrl(blob) };
+  state.photos[index] = { source: canvas, blob, dataUrl: await blobToDataUrl(blob) };
+}
+
+async function rotatePhoto(index) {
+  await rotatePhotoBy(index, 1);
   renderReviewPhotos();
 }
 
