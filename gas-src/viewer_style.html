@@ -295,9 +295,16 @@
      スキャン履歴一覧（スマホ最適化カードリスト）
      ============================================================== */
   .record-list {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
+  }
+
+  /* 狭い画面では1列に戻す（バーコードの文字が収まらないため） */
+  @media (max-width: 480px) {
+    .record-list {
+      grid-template-columns: 1fr;
+    }
   }
 
   .record-card {
