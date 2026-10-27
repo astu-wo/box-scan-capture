@@ -19,7 +19,7 @@ const IMAGE_QUALITY = 0.92;
 const FACE_LABELS = ['正面', '側面（右）', '背面', '側面（左）'];
 const DB_NAME = 'boxScanDraft';
 const STORE_NAME = 'drafts';
-const GAS_TIMEOUT_MS = 30000;
+const GAS_TIMEOUT_MS = 90000;
 const EXPECTED_BARCODE_LENGTH = 13;
 const EXPECTED_BARCODE_PREFIX = 'C';
 const AUTO_ROTATE_QUARTER_TURNS = 3;
@@ -574,6 +574,10 @@ async function upload() {
   $('btn-upload').disabled = true;
   $('btn-retake').disabled = true;
   showLoading('写真をアップロードしています…');
+  // 通信や保存に時間がかかる場合に、待機を促す案内へ切り替える
+  const slowMessageTimer = setTimeout(() => {
+    $('loading-message').textContent = '保存に時間がかかっています。このままお待ちください…（1分ほどかかることがあります）';
+  }, 10000);
 
   try {
     const params = {
@@ -600,6 +604,7 @@ async function upload() {
       images: state.photos.map((p) => ({ base64: dataUrlToBase64(p.dataUrl) })),
     });
   } finally {
+    clearTimeout(slowMessageTimer);
     hideLoading();
     $('btn-upload').disabled = false;
     $('btn-retake').disabled = false;
